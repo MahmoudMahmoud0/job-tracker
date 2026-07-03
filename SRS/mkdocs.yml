@@ -1,0 +1,76 @@
+site_name: Job Tracker SRS
+site_description: Software requirements, architecture, API, deployment, and roadmap documentation for the Job Tracker platform.
+site_url: https://example.com/job-tracker-docs
+repo_name: job-tracker-docs
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+    - search.highlight
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+nav:
+  - Home: index.md
+  - Vision:
+      - Executive Summary: vision/executive-summary.md
+      - Business Goals: vision/business-goals.md
+      - Stakeholders: vision/stakeholders.md
+      - Personas: vision/personas.md
+      - Glossary: vision/glossary.md
+  - Requirements:
+      - Functional Requirements: requirements/functional-requirements.md
+      - Non-Functional Requirements: requirements/non-functional.md
+      - Business Rules: requirements/business-rules.md
+      - User Stories: requirements/user-stories.md
+      - Acceptance Criteria: requirements/acceptance-criteria.md
+  - Architecture:
+      - Overview: architecture/overview.md
+      - Django Apps: architecture/django-apps.md
+      - Folder Structure: architecture/folder-structure.md
+      - ERD: architecture/erd.md
+      - Models: architecture/models.md
+      - Permissions: architecture/permissions.md
+  - UI:
+      - Dashboard: ui/dashboard.md
+      - Applications: ui/applications.md
+      - Companies: ui/companies.md
+      - Interviews: ui/interviews.md
+      - Reports: ui/reports.md
+      - Settings: ui/settings.md
+  - API:
+      - Authentication: api/authentication.md
+      - Applications: api/applications.md
+      - Companies: api/companies.md
+      - Interviews: api/interviews.md
+      - Reports: api/reports.md
+  - Deployment:
+      - Docker: deployment/docker.md
+      - Nginx: deployment/nginx.md
+      - Postgres: deployment/postgres.md
+      - Production: deployment/production.md
+      - CI/CD: deployment/ci-cd.md
+  - Testing:
+      - Unit Tests: testing/unit-tests.md
+      - Integration Tests: testing/integration-tests.md
+      - Security Tests: testing/security-tests.md
+      - Performance Tests: testing/performance-tests.md
+  - Roadmap:
+      - Sprint 01: roadmap/sprint-01.md
+      - Sprint 02: roadmap/sprint-02.md
+      - Sprint 03: roadmap/sprint-03.md
+      - Backlog: roadmap/backlog.md
+
