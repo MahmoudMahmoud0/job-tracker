@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html lang="eng">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Job Tracker</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    </head>
+
+    <body class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 text-slate-900">
+        <div class="fixed inset-0 -z-10 overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(34,211,238,0.18),_transparent_34%)]"></div>
+            <div class="absolute -top-24 -left-20 h-72 w-72 rounded-full bg-blue-300/30 blur-3xl"></div>
+            <div class="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cyan-300/30 blur-3xl"></div>
+            <div class="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(rgba(148,163,184,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.18)_1px,transparent_1px)] [background-size:42px_42px]"></div>
+        </div>
+
+        <div class="mx-auto max-w-6xl px-4 md:px-6">
+            {% include "navbar.html" %}
+
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </body>
+
+</html>

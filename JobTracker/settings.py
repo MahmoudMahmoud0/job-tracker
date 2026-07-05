@@ -10,17 +10,18 @@ environ.Env.read_env() # location in this case BASE_DIR / 'JobTracker'
 
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-'''
-Mailer = {
-    "HOST": env("SMTP_HOST"),
-    "PORT": env.int("SMTP_PORT"),
-    "USERNAME": env("SMTP_USERNAME"),
-    "PASSWORD": env("SMTP_PASSWORD"),
-    "USE_TLS": env.bool("SMTP_USE_TLS", default=True),
-    "DEFAULT_FROM": env("DEFAULT_FROM_EMAIL"),
-}
-'''
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env.int("EMAIL_PORT")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", default=False)
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+
 
 ALLOWED_HOSTS = []
 
@@ -51,6 +52,11 @@ INSTALLED_APPS = [
 
     # Local Apps
     'accounts',
+
+    # Third Party Apps
+    "rest_framework",
+    "crispy_forms",
+    "crispy_tailwind",
 ]
 
 MIDDLEWARE = [
@@ -68,7 +74,7 @@ ROOT_URLCONF = 'JobTracker.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,7 +138,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 # customs
 AUTH_USER_MODEL = 'accounts.User'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
