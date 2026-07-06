@@ -42,9 +42,6 @@ class SignupView(generic.CreateView):
             },
         )
 
-    def form_invalid(self, form):
-        print(form.errors)
-        return super().form_invalid(form)
 
 class VerifyEmailView(generic.View):
     def get(self, request, uidb64, token):
