@@ -11,18 +11,43 @@
       </div>
 
       <div class="max-w-lg mx-auto rounded-3xl border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
-         <form method="post">
+         <form method="post" onsubmit="showLoading(this)">
             {% csrf_token %}
             {{ form|crispy }}
 
             <div class="flex justify-center">
                <button
-                  class="flex justify-center bg-blue-500 hover:bg-blue-600 px-3 py-2 rounded-lg text-white"
-                  type="submit">Signup</button>
+                  id="signup-btn"
+                  class="flex items-center justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-white disabled:cursor-not-allowed disabled:bg-blue-400 hover:bg-blue-600"
+                  type="submit">
+                  <span id="signup-text">Signup</span>
+                  <svg
+                     id="signup-spinner"
+                     class="hidden h-5 w-5 animate-spin"
+                     xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24">
+                     <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4">
+                     </circle>
+                     <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+                     </path>
+                  </svg>
+               </button>
             </div>
          </form>
       </div>
    </div>
 </main>
+
+<script src="{% static 'js/signup.js' %}"></script>
 
 {% endblock content %}
