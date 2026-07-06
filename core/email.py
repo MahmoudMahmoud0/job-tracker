@@ -8,7 +8,7 @@ LOGO_CID = "job_tracker_logo"
 LOGO_PATH = settings.BASE_DIR / "static" / "images" / "logo.png"
 
 
-def _attach_default_inline_images(email):
+def attach_default_inline_images(email):
     """
     Attach application branding used by all emails.
     """
@@ -55,6 +55,6 @@ def send_html_email(
 
     email.attach_alternative(html_content, "text/html")
 
-    _attach_default_inline_images(email)
+    attach_default_inline_images(email)
 
     email.send()

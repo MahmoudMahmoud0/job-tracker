@@ -46,6 +46,12 @@
                   </svg>
                </button>
             </div>
+
+            <div class="mt-4 text-center text-sm">
+               <a href="{% url 'accounts:reset-password' %}" class="font-medium text-blue-600 transition-colors hover:text-blue-700">
+                  Forgot password?
+               </a>
+            </div>
          </form>
 
          {% if form.recovery_action and form.recovery_email %}

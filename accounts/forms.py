@@ -1,11 +1,14 @@
 from django.contrib.auth.forms import (
     UserCreationForm,
-    AuthenticationForm
+    AuthenticationForm,
+    PasswordResetForm,
 )
 from django.contrib.auth import authenticate
+from django.contrib.sites.shortcuts import get_current_site
 from .models import User
 from django import forms
 from django.core.exceptions import ValidationError
+from django_q.tasks import async_task
 from django.utils.translation import gettext_lazy as _
 
 class SignupForm(UserCreationForm):
@@ -94,4 +97,42 @@ class LoginForm(AuthenticationForm):
             raise ValidationError(
                 self.error_messages["inactive"],
                 code="inactive",
+            )
+
+
+class BrandedPasswordResetForm(PasswordResetForm):
+    def save(
+        self,
+        subject_template_name,
+        email_template_name,
+        from_email,
+        domain_override=None,
+        use_https=False,
+        token_generator=None,
+        request=None,
+        html_email_template_name=None,
+        extra_email_context=None,
+    ):
+        email = self.cleaned_data["email"]
+        if not domain_override:
+            current_site = get_current_site(request)
+            site_name = current_site.name
+            domain = current_site.domain
+        else:
+            site_name = domain = domain_override
+
+        protocol = "https" if use_https else "http"
+
+        for user in self.get_users(email):
+            async_task(
+                "accounts.tasks.send_password_reset_email_task",
+                user.pk,
+                domain=domain,
+                site_name=site_name,
+                protocol=protocol,
+                from_email=from_email,
+                subject_template_name=subject_template_name,
+                email_template_name=email_template_name,
+                html_email_template_name=html_email_template_name,
+                extra_email_context=extra_email_context,
             )
