@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "crispy_forms",
     "crispy_tailwind",
+    "django_q",
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,13 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'accounts.User'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
+
+Q_CLUSTER = {
+    "name": "job_tracker",
+    "workers": 2,
+    "timeout": 60,
+    "retry": 120,
+    "queue_limit": 50,
+    "bulk": 10,
+    "orm": "default",
+}

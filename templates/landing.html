@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="pb-20">
+   <section id="overview" class="grid gap-10 py-14 md:grid-cols-[1.15fr_0.85fr] md:items-center md:py-20">
+      <div>
+         <p class="inline-flex rounded-full border border-blue-200 bg-white/75 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-blue-700 shadow-sm">
+            Structured Job Search
+         </p>
+         <h1 class="mt-6 max-w-3xl text-4xl font-semibold tracking-tight text-slate-900 md:text-6xl">
+            Replace scattered spreadsheets and sticky notes with one calm job-search workflow.
+         </h1>
+         <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+            Job Tracker is a productivity platform for job seekers and career coaches who need one place for
+            applications, interviews, company research, follow-ups, and the signals that show what is actually working.
+         </p>
+         <div class="mt-8 flex flex-wrap items-center gap-4">
+            <a href="{% url 'accounts:signup' %}"
+               class="rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700">
+               Create your account
+            </a>
+            <a href="#dashboard"
+               class="rounded-full border border-slate-300 bg-white/80 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-white">
+               See how it works
+            </a>
+         </div>
+         <dl class="mt-10 grid gap-4 sm:grid-cols-3">
+            <div class="rounded-2xl border border-white/70 bg-white/75 p-4 shadow-sm backdrop-blur">
+               <dt class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Fast setup</dt>
+               <dd class="mt-2 text-sm text-slate-700">Create and update applications in under one minute.</dd>
+            </div>
+            <div class="rounded-2xl border border-white/70 bg-white/75 p-4 shadow-sm backdrop-blur">
+               <dt class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Always visible</dt>
+               <dd class="mt-2 text-sm text-slate-700">Upcoming interviews and overdue follow-ups stay in view.</dd>
+            </div>
+            <div class="rounded-2xl border border-white/70 bg-white/75 p-4 shadow-sm backdrop-blur">
+               <dt class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Meaningful metrics</dt>
+               <dd class="mt-2 text-sm text-slate-700">Understand source quality, conversion, and pipeline health.</dd>
+            </div>
+         </dl>
+      </div>
+
+      <div class="rounded-[2rem] border border-white/80 bg-white/80 p-5 shadow-[0_30px_90px_rgba(15,23,42,0.12)] backdrop-blur-xl">
+         <div class="rounded-[1.5rem] bg-slate-900 p-5 text-white">
+            <div class="flex items-center justify-between">
+               <div>
+                  <p class="text-xs uppercase tracking-[0.22em] text-blue-200">Dashboard snapshot</p>
+                  <h2 class="mt-2 text-2xl font-semibold">Your next actions, not just your data.</h2>
+               </div>
+               <span class="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200">
+                  Search active
+               </span>
+            </div>
+            <div class="mt-6 grid gap-4 sm:grid-cols-2">
+               <div class="rounded-2xl bg-white/10 p-4">
+                  <p class="text-xs uppercase tracking-[0.18em] text-slate-300">Applications</p>
+                  <p class="mt-3 text-3xl font-semibold">48</p>
+                  <p class="mt-2 text-sm text-slate-300">Tracked across 6 stages</p>
+               </div>
+               <div class="rounded-2xl bg-white/10 p-4">
+                  <p class="text-xs uppercase tracking-[0.18em] text-slate-300">Next 7 days</p>
+                  <p class="mt-3 text-3xl font-semibold">5</p>
+                  <p class="mt-2 text-sm text-slate-300">Interviews and follow-ups due</p>
+               </div>
+               <div class="rounded-2xl bg-white/10 p-4 sm:col-span-2">
+                  <div class="flex items-center justify-between text-sm">
+                     <span class="text-slate-300">Top opportunity sources</span>
+                     <span class="text-blue-200">Weekly trend rising</span>
+                  </div>
+                  <div class="mt-4 space-y-3">
+                     <div>
+                        <div class="flex items-center justify-between text-xs text-slate-300">
+                           <span>LinkedIn</span>
+                           <span>42%</span>
+                        </div>
+                        <div class="mt-1 h-2 rounded-full bg-white/10">
+                           <div class="h-2 w-[42%] rounded-full bg-blue-400"></div>
+                        </div>
+                     </div>
+                     <div>
+                        <div class="flex items-center justify-between text-xs text-slate-300">
+                           <span>Company sites</span>
+                           <span>33%</span>
+                        </div>
+                        <div class="mt-1 h-2 rounded-full bg-white/10">
+                           <div class="h-2 w-[33%] rounded-full bg-cyan-300"></div>
+                        </div>
+                     </div>
+                     <div>
+                        <div class="flex items-center justify-between text-xs text-slate-300">
+                           <span>Referrals</span>
+                           <span>25%</span>
+                        </div>
+                        <div class="mt-1 h-2 rounded-full bg-white/10">
+                           <div class="h-2 w-[25%] rounded-full bg-emerald-300"></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <section id="dashboard" class="py-8">
+      <div class="rounded-[2rem] border border-slate-200/70 bg-white/80 p-8 shadow-sm backdrop-blur">
+         <div class="max-w-3xl">
+            <p class="text-sm font-semibold uppercase tracking-[0.22em] text-blue-700">Why it works</p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900">Built for actionability over admin work.</h2>
+            <p class="mt-4 text-base leading-7 text-slate-600">
+               The product is designed around speed over ceremony, clarity over complexity, and actionable data over
+               vanity metrics. Instead of juggling tabs and memory, users see totals, stage distribution, interviews,
+               follow-ups, and source performance in one place.
+            </p>
+         </div>
+         <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
+               <h3 class="font-semibold text-slate-900">Pipeline visibility</h3>
+               <p class="mt-2 text-sm leading-6 text-slate-600">Track every application through a clear lifecycle instead of fragmented notes.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
+               <h3 class="font-semibold text-slate-900">Interview readiness</h3>
+               <p class="mt-2 text-sm leading-6 text-slate-600">Keep preparation, outcomes, and interview schedules attached to the right role.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
+               <h3 class="font-semibold text-slate-900">Company context</h3>
+               <p class="mt-2 text-sm leading-6 text-slate-600">Preserve research notes, contacts, and related applications in one record.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
+               <h3 class="font-semibold text-slate-900">Search insight</h3>
+               <p class="mt-2 text-sm leading-6 text-slate-600">See what sources convert and where your search is slowing down.</p>
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <section id="workflow" class="py-10">
+      <div class="grid gap-6 md:grid-cols-3">
+         <div id="applications" class="rounded-[1.75rem] border border-white/70 bg-white/80 p-7 shadow-sm backdrop-blur">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">Applications</p>
+            <h3 class="mt-3 text-2xl font-semibold text-slate-900">Keep the pipeline current.</h3>
+            <p class="mt-4 text-sm leading-7 text-slate-600">
+               Log new applications quickly, update statuses inline, and move between table and kanban views without losing context.
+            </p>
+            <ul class="mt-5 space-y-3 text-sm text-slate-700">
+               <li>Sorting and filtering by company, source, date, and tags</li>
+               <li>Stage-based workflow for fast status updates</li>
+               <li>Quick-add notes and reminders</li>
+            </ul>
+         </div>
+
+         <div id="companies" class="rounded-[1.75rem] border border-white/70 bg-white/80 p-7 shadow-sm backdrop-blur">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">Companies</p>
+            <h3 class="mt-3 text-2xl font-semibold text-slate-900">Research without losing the thread.</h3>
+            <p class="mt-4 text-sm leading-7 text-slate-600">
+               Store company details, notes, linked applications, and contact context so every next action starts informed.
+            </p>
+            <ul class="mt-5 space-y-3 text-sm text-slate-700">
+               <li>Directory plus detail views</li>
+               <li>Linked application and contact history</li>
+               <li>Fast access to recent activity</li>
+            </ul>
+         </div>
+
+         <div id="interviews" class="rounded-[1.75rem] border border-white/70 bg-white/80 p-7 shadow-sm backdrop-blur">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">Interviews</p>
+            <h3 class="mt-3 text-2xl font-semibold text-slate-900">Prepare better for every round.</h3>
+            <p class="mt-4 text-sm leading-7 text-slate-600">
+               Manage phone, video, onsite, and technical interviews with timezone-aware scheduling, prep notes, and outcomes.
+            </p>
+            <ul class="mt-5 space-y-3 text-sm text-slate-700">
+               <li>Calendar or agenda-based organization</li>
+               <li>Interviewer names and round-by-round notes</li>
+               <li>Post-interview follow-up tracking</li>
+            </ul>
+         </div>
+      </div>
+   </section>
+
+   <section id="reports" class="py-10">
+      <div class="rounded-[2rem] border border-slate-200/70 bg-slate-900 p-8 text-white shadow-[0_24px_80px_rgba(15,23,42,0.22)]">
+         <div class="grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-center">
+            <div>
+               <p class="text-sm font-semibold uppercase tracking-[0.22em] text-blue-200">Reporting that matters</p>
+               <h2 class="mt-3 text-3xl font-semibold tracking-tight">Measure what improves your search, not what decorates a dashboard.</h2>
+               <p class="mt-4 text-base leading-7 text-slate-300">
+                  Review pipeline summary, source effectiveness, application aging, and interview conversion with usable filters and export-friendly structure.
+               </p>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+               <div class="rounded-2xl bg-white/10 p-5">
+                  <h3 class="font-semibold">Pipeline summary</h3>
+                  <p class="mt-2 text-sm text-slate-300">Spot bottlenecks and stalled opportunities.</p>
+               </div>
+               <div class="rounded-2xl bg-white/10 p-5">
+                  <h3 class="font-semibold">Source effectiveness</h3>
+                  <p class="mt-2 text-sm text-slate-300">Learn where strong leads are actually coming from.</p>
+               </div>
+               <div class="rounded-2xl bg-white/10 p-5">
+                  <h3 class="font-semibold">Application aging</h3>
+                  <p class="mt-2 text-sm text-slate-300">See which follow-ups need attention right now.</p>
+               </div>
+               <div class="rounded-2xl bg-white/10 p-5">
+                  <h3 class="font-semibold">Interview conversion</h3>
+                  <p class="mt-2 text-sm text-slate-300">Turn activity into evidence-backed strategy.</p>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <section id="settings" class="py-10">
+      <div class="grid gap-6 md:grid-cols-[1fr_0.9fr]">
+         <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-7 shadow-sm backdrop-blur">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">Built for your workflow</p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900">Useful for active job seekers, career switchers, and coaches.</h2>
+            <div class="mt-6 space-y-4 text-sm leading-7 text-slate-600">
+               <p><span class="font-semibold text-slate-900">Active job seekers</span> get fast entry, clear status tracking, and reminders that prevent missed follow-ups.</p>
+               <p><span class="font-semibold text-slate-900">Career switchers</span> get room for deep research, tags, and structured comparison across industries and roles.</p>
+               <p><span class="font-semibold text-slate-900">Career coaches</span> get dashboards and progress snapshots backed by structured data instead of anecdotes.</p>
+            </div>
+         </div>
+         <div class="rounded-[1.75rem] border border-white/70 bg-white/80 p-7 shadow-sm backdrop-blur">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Settings foundation</p>
+            <ul class="mt-5 space-y-4 text-sm text-slate-700">
+               <li class="rounded-2xl bg-slate-50 p-4">Profile and notification preferences</li>
+               <li class="rounded-2xl bg-slate-50 p-4">Reminder lead times and timezone controls</li>
+               <li class="rounded-2xl bg-slate-50 p-4">Export and data management for long searches</li>
+               <li class="rounded-2xl bg-slate-50 p-4">Recent-auth protection for sensitive account changes</li>
+            </ul>
+         </div>
+      </div>
+   </section>
+
+   <section class="py-10">
+      <div class="rounded-[2rem] border border-blue-200/70 bg-gradient-to-r from-blue-600 to-cyan-500 p-8 text-white shadow-[0_30px_80px_rgba(37,99,235,0.26)]">
+         <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div class="max-w-2xl">
+               <p class="text-sm font-semibold uppercase tracking-[0.22em] text-blue-100">Start simply</p>
+               <h2 class="mt-3 text-3xl font-semibold tracking-tight">Build a job-search system that actually keeps up with your effort.</h2>
+               <p class="mt-4 text-base leading-7 text-blue-50">
+                  Create your account, add your first company or application, and let the dashboard tell you what deserves attention next.
+               </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-4">
+               <a href="{% url 'accounts:signup' %}"
+                  class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-50">
+                  Get started free
+               </a>
+               <a href="#overview"
+                  class="rounded-full border border-white/50 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
+                  Back to top
+               </a>
+            </div>
+         </div>
+      </div>
+   </section>
+</main>
+{% endblock content %}

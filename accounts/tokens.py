@@ -4,17 +4,17 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 
-def build_verification_url(user, request):
+def build_verification_url(user, domain, scheme):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
 
     token = default_token_generator.make_token(user)
 
-    return request.build_absolute_uri(
-        reverse(
-            "accounts:verify-email",
-            kwargs={
-                "uidb64": uid,
-                "token": token,
-            },
-        )
+    path = reverse(
+        "accounts:verify-email",
+        kwargs={
+            "uidb64": uid,
+            "token": token,
+        },
     )
+
+    return f"{scheme}://{domain}{path}"

@@ -3,7 +3,7 @@
    class="flex py-2 px-4 md:px-8 bg-white border-b border-slate-300 dark:border-neutral-700 dark:bg-neutral-900 min-h-[68px] relative z-20"
    aria-label="Main navigation">
    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 w-full">
-      <a href="{% url 'accounts:signup' %}"
+      <a href="{% url 'landing' %}"
          class="min-w-9 inline-flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
          <span class="sr-only">Job Tracker - Mahmoud Mahmoud</span>
          <img src="{% static 'images/logo.png' %}" alt="Job Tracker logo" class="h-14 w-auto" />
@@ -18,7 +18,7 @@
 
          <div
             class="py-2 px-4 flex justify-between items-center border-b border-slate-300 sticky top-0 bg-white dark:border-neutral-700 dark:bg-neutral-900 lg:hidden max-lg:min-h-[68px]">
-            <a href="{% url 'accounts:signup' %}"
+            <a href="{% url 'landing' %}"
                class="inline-flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
                <span class="sr-only">Job Tracker</span>
                <img src="{% static 'images/logo.png' %}" alt="Job Tracker logo" class="h-14 w-auto" />
@@ -38,9 +38,9 @@
 
          <ul class="flex flex-col gap-8 font-semibold text-sm text-slate-900 dark:text-slate-50 lg:flex-row max-lg:p-6">
             <li>
-               <a href="{% url 'accounts:signup' %}"
+               <a href="{% url 'landing' %}#overview"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
-                  aria-current="page">Dashboard</a>
+                  aria-current="page">Overview</a>
             </li>
             <li class="relative">
                <button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="featuresMenu"
@@ -59,28 +59,28 @@
                   class="bg-white dark:bg-neutral-900 space-y-6 py-4 px-4 hidden min-w-44 rounded-lg z-50 overflow-hidden lg:absolute lg:shadow-lg lg:px-6 lg:top-9 lg:-left-6 max-lg:mt-2 dark:lg:border dark:lg:border-neutral-700">
 
                   <li>
-                     <a href="#" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
+                     <a href="{% url 'landing' %}#workflow" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
                focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
                         Add Application
                      </a>
                   </li>
 
                   <li>
-                     <a href="#" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
+                     <a href="{% url 'landing' %}#workflow" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
                focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
                         Update Pipeline
                      </a>
                   </li>
 
                   <li>
-                     <a href="#" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
+                     <a href="{% url 'landing' %}#interviews" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
                focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
                         Schedule Interview
                      </a>
                   </li>
 
                   <li>
-                     <a href="#" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
+                     <a href="{% url 'landing' %}#workflow" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
                focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
                         Follow-up Notes
                      </a>
@@ -89,23 +89,23 @@
                </ul>
             </li>
             <li>
-               <a href="#"
+               <a href="{% url 'landing' %}#applications"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">Applications</a>
             </li>
             <li>
-               <a href="#"
+               <a href="{% url 'landing' %}#companies"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">Companies</a>
             </li>
             <li>
-               <a href="#"
+               <a href="{% url 'landing' %}#interviews"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">Interviews</a>
             </li>
             <li>
-               <a href="#"
+               <a href="{% url 'landing' %}#reports"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">Reports</a>
             </li>
             <li>
-               <a href="#"
+               <a href="{% url 'landing' %}#settings"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">Settings</a>
             </li>
          </ul>
