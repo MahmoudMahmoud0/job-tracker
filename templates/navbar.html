@@ -2,7 +2,7 @@
 <nav
    class="flex py-2 px-4 md:px-8 bg-white border-b border-slate-300 dark:border-neutral-700 dark:bg-neutral-900 min-h-[68px] relative z-20"
    aria-label="Main navigation">
-   <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 w-full">
+   <div class="max-w-7xl mx-auto flex items-center gap-4 w-full">
       <a href="{% url 'landing' %}"
          class="min-w-9 inline-flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
          <span class="sr-only">Job Tracker - Mahmoud Mahmoud</span>
@@ -14,7 +14,7 @@
       </a>
 
       <div id="collapseMenu" tabindex="-1"
-         class="hidden lg:block max-lg:bg-white dark:max-lg:bg-neutral-900 max-lg:border-l max-lg:border-slate-300 dark:max-lg:border-neutral-700 max-lg:w-1/2 max-lg:fixed max-lg:top-0 max-lg:right-0 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto max-sm:w-full z-50 outline-none">
+         class="hidden lg:block lg:flex-1 max-lg:bg-white dark:max-lg:bg-neutral-900 max-lg:border-l max-lg:border-slate-300 dark:max-lg:border-neutral-700 max-lg:w-1/2 max-lg:fixed max-lg:top-0 max-lg:right-0 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto max-sm:w-full z-50 outline-none">
 
          <div
             class="py-2 px-4 flex justify-between items-center border-b border-slate-300 sticky top-0 bg-white dark:border-neutral-700 dark:bg-neutral-900 lg:hidden max-lg:min-h-[68px]">
@@ -36,12 +36,15 @@
             </button>
          </div>
 
-         <ul class="flex flex-col gap-8 font-semibold text-sm text-slate-900 dark:text-slate-50 lg:flex-row max-lg:p-6">
+         <ul class="flex flex-col gap-8 font-semibold text-sm text-slate-900 dark:text-slate-50 lg:flex-row lg:justify-start max-lg:p-6">
+            <!-- {% if not request.user.is_authenticated %}
             <li>
                <a href="{% url 'landing' %}#overview"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
                   aria-current="page">Overview</a>
             </li>
+            {% endif %} -->
+            {% if request.user.is_authenticated %}
             <li class="relative">
                <button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="featuresMenu"
                   id="featuresToggle" class="hover:text-blue-700 dark:hover:text-blue-400
@@ -108,16 +111,23 @@
                <a href="{% url 'landing' %}#settings"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">Settings</a>
             </li>
+            {% endif %}
          </ul>
       </div>
 
-      <div class="flex items-center gap-3 whitespace-nowrap">
+      {% if not request.user.is_authenticated %}
+      <div class="ml-auto flex items-center gap-3 whitespace-nowrap">
          <a href="{% url 'accounts:login' %}"
             class="inline-flex items-center rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-50 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">Log
             in</a>
          <a href="{% url 'accounts:signup' %}"
             class="inline-flex items-center rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">Get
             Started</a>
+         {% else %}
+         <a href="#"
+            class="inline-flex items-center rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">Log
+            out</a>
+         {% endif %}
 
          <button type="button" aria-controls="collapseMenu" aria-expanded="false" aria-haspopup="true" id="toggleOpen"
             class="cursor-pointer lg:hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">

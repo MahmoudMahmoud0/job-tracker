@@ -15,7 +15,7 @@
             {% csrf_token %}
             {{ form|crispy }}
 
-            <div class="flex justify-center">
+            <div class="mt-6 flex justify-center">
                <button
                   id="signup-btn"
                   class="flex items-center justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-white disabled:cursor-not-allowed disabled:bg-blue-400 hover:bg-blue-600"
@@ -44,6 +44,23 @@
                </button>
             </div>
          </form>
+
+         {% if form.existing_account_email %}
+         <div class="mt-6 rounded-2xl border border-blue-200 bg-blue-50/80 p-5 text-sm text-blue-900">
+            <h2 class="text-base font-semibold text-blue-950">Looks like you already have an account</h2>
+            <p class="mt-2 leading-6">
+               You can head straight to login with <span class="font-semibold">{{ form.existing_account_email }}</span>.
+               If that account is unverified or inactive, we will help you recover access there.
+            </p>
+            <div class="mt-4">
+               <a
+                  href="{% url 'accounts:login' %}?username={{ form.existing_account_email|urlencode }}"
+                  class="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
+                  Go to login
+               </a>
+            </div>
+         </div>
+         {% endif %}
       </div>
    </div>
 </main>

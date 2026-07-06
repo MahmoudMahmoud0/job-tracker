@@ -9,6 +9,10 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 class SignupForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.existing_account_email = None
+
     class Meta:
         model = User
         fields = [
@@ -18,6 +22,18 @@ class SignupForm(UserCreationForm):
             "password1",
             "password2",
         ]
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+
+        if User._default_manager.filter(email__iexact=email).exists():
+            self.existing_account_email = email
+            raise ValidationError(
+                _("An account with this email already exists. Try logging in instead."),
+                code="duplicate_email",
+            )
+
+        return email
 
 class LoginForm(AuthenticationForm):
     username = forms.EmailField(
@@ -43,6 +59,10 @@ class LoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.recovery_action = None
         self.recovery_email = None
+        if self.request and self.request.method == "GET":
+            initial_email = self.request.GET.get("username")
+            if initial_email:
+                self.fields["username"].initial = initial_email
 
     def clean(self):
         email = self.cleaned_data.get("username")
