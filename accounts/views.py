@@ -7,12 +7,13 @@ from .services import verify_email
 from django.urls import reverse_lazy
 from django_q.tasks import async_task
 from django.db import transaction
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class SignupView(generic.CreateView):
     template_name = "registration/signup.html"
     form_class = SignupForm
-    success_url = reverse_lazy("accounts:signup")
+    success_url = reverse_lazy("accounts:login")
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -114,3 +115,22 @@ class ReactivateAccountView(generic.View):
                 "secondary_url": reverse_lazy("landing"),
             },
         )
+    
+class MeView(LoginRequiredMixin, generic.UpdateView):
+    model = User
+    template_name = "accounts/me.html"
+    fields = [
+        "first_name",
+        "last_name",
+        "reminder_email_notifier",
+        "reminder_lead_time",
+        "timezone",
+        "export_format",
+        "auto_delete_exports",
+        "retain_export_days",
+    ]
+
+    success_url = reverse_lazy("accounts:me")
+
+    def get_object(self):
+        return self.request.user

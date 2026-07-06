@@ -13,6 +13,7 @@ from .views import (
     VerifyEmailView,
     SendVerificationEmailView,
     ReactivateAccountView,
+    MeView,
 )
 
 app_name = "accounts"
@@ -61,5 +62,6 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
+    path("me/", MeView.as_view(), name="me")
 
 ]

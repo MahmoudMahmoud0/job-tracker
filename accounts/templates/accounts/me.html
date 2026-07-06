@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="min-h-screen flex flex-col items-center p-4 md:p-8">
+   <div class="mx-auto flex w-full max-w-5xl flex-col items-center">
+      <section class="mb-10 text-center">
+         <p class="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">
+            My Account
+         </p>
+         <div class="mt-6 flex flex-col items-center gap-6">
+            <div class="flex flex-col items-center">
+               <h1 class="text-3xl font-semibold tracking-tight text-slate-800 md:text-4xl">
+                  Edit your account settings
+               </h1>
+               <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 md:text-base">
+                  Update your profile, reminder preferences, timezone, and export defaults from one calm workspace.
+               </p>
+            </div>
+         </div>
+      </section>
+
+      <section class="w-full">
+         <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="rounded-2xl border border-rose-200 bg-rose-50/90 p-4 text-center text-sm text-rose-700">
+               {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <article class="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+               <div class="flex flex-col items-center gap-4 text-center">
+                  <div class="flex flex-col items-center">
+                     <h2 class="text-xl font-semibold text-slate-900">Profile</h2>
+                     <p class="mt-2 text-sm leading-6 text-slate-600">
+                        Keep your name details current so your workspace stays personal and organized.
+                     </p>
+                  </div>
+                  <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                     Account
+                  </span>
+               </div>
+
+               <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
+                     <label for="{{ form.first_name.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        First name
+                     </label>
+                     <div class="mt-3">
+                        <input
+                           type="text"
+                           name="{{ form.first_name.html_name }}"
+                           id="{{ form.first_name.id_for_label }}"
+                           value="{{ form.first_name.value|default_if_none:'' }}"
+                           class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100">
+                     </div>
+                     {% if form.first_name.errors %}
+                     <p class="mt-2 text-sm text-rose-600">{{ form.first_name.errors|join:", " }}</p>
+                     {% endif %}
+                  </div>
+
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
+                     <label for="{{ form.last_name.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        Last name
+                     </label>
+                     <div class="mt-3">
+                        <input
+                           type="text"
+                           name="{{ form.last_name.html_name }}"
+                           id="{{ form.last_name.id_for_label }}"
+                           value="{{ form.last_name.value|default_if_none:'' }}"
+                           class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100">
+                     </div>
+                     {% if form.last_name.errors %}
+                     <p class="mt-2 text-sm text-rose-600">{{ form.last_name.errors|join:", " }}</p>
+                     {% endif %}
+                  </div>
+               </div>
+            </article>
+
+            <article class="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+               <div class="flex flex-col items-center gap-4 text-center">
+                  <div class="flex flex-col items-center">
+                     <h2 class="text-xl font-semibold text-slate-900">Preferences</h2>
+                     <p class="mt-2 text-sm leading-6 text-slate-600">
+                        Tune reminders and exports to match the way you keep your job search moving.
+                     </p>
+                  </div>
+                  <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">
+                     Settings
+                  </span>
+               </div>
+
+               <div class="mt-8 grid gap-4 sm:grid-cols-2">
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center sm:col-span-2">
+                     <label for="{{ form.reminder_email_notifier.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        Reminder emails
+                     </label>
+                     <div class="mt-4 flex items-center justify-center gap-3">
+                        <input
+                           type="checkbox"
+                           name="{{ form.reminder_email_notifier.html_name }}"
+                           id="{{ form.reminder_email_notifier.id_for_label }}"
+                           class="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                           {% if form.reminder_email_notifier.value %}checked{% endif %}>
+                        <span class="text-sm font-medium text-slate-700">Send me reminder emails</span>
+                     </div>
+                     {% if form.reminder_email_notifier.errors %}
+                     <p class="mt-2 text-sm text-rose-600">{{ form.reminder_email_notifier.errors|join:", " }}</p>
+                     {% endif %}
+                  </div>
+
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
+                     <label for="{{ form.reminder_lead_time.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        Reminder lead time
+                     </label>
+                     <div class="mt-3">
+                        <input
+                           type="number"
+                           name="{{ form.reminder_lead_time.html_name }}"
+                           id="{{ form.reminder_lead_time.id_for_label }}"
+                           value="{{ form.reminder_lead_time.value|default_if_none:'' }}"
+                           min="0"
+                           class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100">
+                     </div>
+                     {% if form.reminder_lead_time.errors %}
+                     <p class="mt-2 text-sm text-rose-600">{{ form.reminder_lead_time.errors|join:", " }}</p>
+                     {% endif %}
+                  </div>
+
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
+                     <label for="{{ form.timezone.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        Timezone
+                     </label>
+                     <div class="mt-3">
+                        <select
+                           name="{{ form.timezone.html_name }}"
+                           id="{{ form.timezone.id_for_label }}"
+                           class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100">
+                           {% for value, label in form.fields.timezone.choices %}
+                           <option value="{{ value }}" {% if form.timezone.value == value %}selected{% endif %}>{{ label }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                     {% if form.timezone.errors %}
+                     <p class="mt-2 text-sm text-rose-600">{{ form.timezone.errors|join:", " }}</p>
+                     {% endif %}
+                  </div>
+
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
+                     <label for="{{ form.export_format.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        Default export format
+                     </label>
+                     <div class="mt-3">
+                        <select
+                           name="{{ form.export_format.html_name }}"
+                           id="{{ form.export_format.id_for_label }}"
+                           class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100">
+                           {% for value, label in form.fields.export_format.choices %}
+                           <option value="{{ value }}" {% if form.export_format.value == value %}selected{% endif %}>{{ label }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                     {% if form.export_format.errors %}
+                     <p class="mt-2 text-sm text-rose-600">{{ form.export_format.errors|join:", " }}</p>
+                     {% endif %}
+                  </div>
+
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
+                     <label for="{{ form.auto_delete_exports.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        Auto delete exports
+                     </label>
+                     <div class="mt-4 flex items-center justify-center gap-3">
+                        <input
+                           type="checkbox"
+                           name="{{ form.auto_delete_exports.html_name }}"
+                           id="{{ form.auto_delete_exports.id_for_label }}"
+                           class="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                           {% if form.auto_delete_exports.value %}checked{% endif %}>
+                        <span class="text-sm font-medium text-slate-700">Automatically remove old exports</span>
+                     </div>
+                     {% if form.auto_delete_exports.errors %}
+                     <p class="mt-2 text-sm text-rose-600">{{ form.auto_delete_exports.errors|join:", " }}</p>
+                     {% endif %}
+                  </div>
+
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
+                     <label for="{{ form.retain_export_days.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        Export retention
+                     </label>
+                     <div class="mt-3">
+                        <input
+                           type="number"
+                           name="{{ form.retain_export_days.html_name }}"
+                           id="{{ form.retain_export_days.id_for_label }}"
+                           value="{{ form.retain_export_days.value|default_if_none:'' }}"
+                           min="0"
+                           class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100">
+                     </div>
+                     {% if form.retain_export_days.errors %}
+                     <p class="mt-2 text-sm text-rose-600">{{ form.retain_export_days.errors|join:", " }}</p>
+                     {% endif %}
+                  </div>
+               </div>
+            </article>
+
+            <div class="flex justify-center">
+               <button
+                  type="submit"
+                  class="inline-flex items-center justify-center rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                  Save changes
+               </button>
+            </div>
+         </form>
+      </section>
+   </div>
+</main>
+{% endblock content %}
