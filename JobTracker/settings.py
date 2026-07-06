@@ -146,6 +146,9 @@ STATICFILES_DIRS = [
 
 # customs
 AUTH_USER_MODEL = 'accounts.User'
+AUTHENTICATION_BACKENDS = [
+    "accounts.backends.EmailStatusAwareBackend",
+]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
@@ -158,3 +161,6 @@ Q_CLUSTER = {
     "bulk": 10,
     "orm": "default",
 }
+
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "accounts:signup"

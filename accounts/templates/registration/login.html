@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+{% load static %}
+{% block content %}
+
+<main class="min-h-screen flex flex-col justify-center p-4 md:p-8">
+   <div class="w-full max-w-lg mx-auto sm:max-w-4xl">
+      <div class="mb-12">
+         <h1 class="mt-6 text-3xl font-semibold tracking-tight text-slate-800 md:text-4xl">Welcome back to your job search workspace</h1>
+         <p class="mt-3 max-w-xl text-sm leading-6 text-slate-600 md:text-base">Sign in to review applications, track interviews, and keep your follow-ups moving without losing momentum.</p>
+      </div>
+
+      <div class="max-w-lg mx-auto rounded-3xl border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+         <form method="post" onsubmit="showLoading(this)">
+            {% csrf_token %}
+            {{ form|crispy }}
+            {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
+            <div class="mt-6 flex justify-center">
+               <button
+                  id="login-btn"
+                  class="flex items-center justify-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-white disabled:cursor-not-allowed disabled:bg-blue-400 hover:bg-blue-600"
+                  type="submit">
+                  <span id="login-text">Log in</span>
+                  <svg
+                     id="login-spinner"
+                     class="hidden h-5 w-5 animate-spin"
+                     xmlns="http://www.w3.org/2000/svg"
+                     fill="none"
+                     viewBox="0 0 24 24">
+                     <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4">
+                     </circle>
+                     <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+                     </path>
+                  </svg>
+               </button>
+            </div>
+         </form>
+
+         {% if form.recovery_action and form.recovery_email %}
+         <div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50/80 p-5 text-sm text-amber-900">
+            {% if form.recovery_action == "verify" %}
+            <h2 class="text-base font-semibold text-amber-950">Need a new verification email?</h2>
+            <p class="mt-2 leading-6">
+               This account exists, but the email address has not been verified yet. We can send you a fresh verification link right away.
+            </p>
+            <form method="post" action="{% url 'accounts:send-verification-email' %}" class="mt-4">
+               {% csrf_token %}
+               <input type="hidden" name="email" value="{{ form.recovery_email }}">
+               <button
+                  class="inline-flex items-center justify-center rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
+                  type="submit">
+                  Send verification email
+               </button>
+            </form>
+            {% elif form.recovery_action == "reactivate" %}
+            <h2 class="text-base font-semibold text-amber-950">Want to reactivate your account?</h2>
+            <p class="mt-2 leading-6">
+               This account is inactive at the moment. If you still want access, we can send you a reactivation email to confirm it is really you.
+            </p>
+            <form method="post" action="{% url 'accounts:reactivate-account' %}" class="mt-4">
+               {% csrf_token %}
+               <input type="hidden" name="email" value="{{ form.recovery_email }}">
+               <button
+                  class="inline-flex items-center justify-center rounded-full bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
+                  type="submit">
+                  Reactivate my account
+               </button>
+            </form>
+            {% endif %}
+         </div>
+         {% endif %}
+
+         <div class="mt-6 border-t border-slate-200 pt-5 text-center text-sm text-slate-600">
+            <p>
+               New here?
+               <a href="{% url 'accounts:signup' %}" class="font-semibold text-blue-600 transition-colors hover:text-blue-700">
+                  Create an account
+               </a>
+            </p>
+         </div>
+      </div>
+   </div>
+</main>
+
+<script src="{% static 'js/signup.js' %}"></script>
+
+{% endblock content %}
