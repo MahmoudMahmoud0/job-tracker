@@ -163,4 +163,4 @@ Q_CLUSTER = {
 }
 
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "accounts:signup"
+LOGOUT_REDIRECT_URL = "accounts:login"
