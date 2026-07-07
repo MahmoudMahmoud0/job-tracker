@@ -177,10 +177,10 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
 
         date_from_parsed = parse_date(date_from) if date_from else None
         date_to_parsed = parse_date(date_to) if date_to else None
-        if date_from:
+        if date_from_parsed:
             queryset = queryset.filter(applied_at__gte=date_from_parsed)
 
-        if date_to:
+        if date_to_parsed:
             queryset = queryset.filter(applied_at__lte=date_to_parsed)
 
         allowed_sorts = dict(self.SORT_OPTIONS)
