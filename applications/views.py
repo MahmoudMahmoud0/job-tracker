@@ -306,9 +306,7 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
                         "filters": filters,
                     },
                 )
-
                 messages.success(request, "Filter saved.")
-
             return redirect(request.get_full_path())
         
         if request.POST.get("action") == "update_status":
@@ -329,7 +327,6 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
                 application.save()
                 messages.success(request, "Status updated.")
             
-
         return redirect("applications:application-list")
 
 
