@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 
     # Local Apps
     'accounts',
+    'companies',
 
     # Third Party Apps
     "rest_framework",

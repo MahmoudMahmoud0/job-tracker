@@ -97,7 +97,7 @@
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">{% trans "Applications" %}</a>
             </li>
             <li>
-               <a href="{% url 'landing' %}#companies"
+               <a href="{% url 'companies:company-list' %}"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">{% trans "Companies" %}</a>
             </li>
             <li>
@@ -107,10 +107,6 @@
             <li>
                <a href="{% url 'landing' %}#reports"
                   class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">{% trans "Reports" %}</a>
-            </li>
-            <li>
-               <a href="{% url 'landing' %}#settings"
-                  class="hover:text-blue-700 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">{% trans "Settings" %}</a>
             </li>
             {% endif %}
          </ul>

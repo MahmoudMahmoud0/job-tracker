@@ -6,4 +6,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', LandingPageView.as_view(), name="landing"),
     path('accounts/', include("accounts.urls", namespace="accounts")),
+    path('companies/', include("companies.urls", namespace="companies")),
 ]
