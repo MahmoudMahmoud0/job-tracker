@@ -25,6 +25,52 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
         ("salary_low", "Lowest salary"),
     ]
 
+    def get_valid_saved_filters(self, filters):
+        valid_filters = {}
+        company_ids = {str(pk) for pk in self.request.user.companies.values_list("pk", flat=True)}
+        tag_ids = {str(pk) for pk in self.request.user.tags.values_list("pk", flat=True)}
+        allowed_statuses = {value for value, _ in Application.STATUS_CHOICES}
+        allowed_sources = {value for value, _ in Application.SOURCE_CHOICES}
+        allowed_sorts = {value for value, _ in self.SORT_OPTIONS}
+
+        q = filters.get("q", "").strip()
+        if q:
+            valid_filters["q"] = q
+
+        company = filters.get("company", "").strip()
+        if company in company_ids:
+            valid_filters["company"] = company
+
+        status = filters.get("status", "").strip()
+        if status in allowed_statuses:
+            valid_filters["status"] = status
+
+        source = filters.get("source", "").strip()
+        if source in allowed_sources:
+            valid_filters["source"] = source
+
+        tag = filters.get("tag", "").strip()
+        if tag in tag_ids:
+            valid_filters["tag"] = tag
+
+        date_from = filters.get("date_from", "").strip()
+        if date_from and parse_date(date_from):
+            valid_filters["date_from"] = date_from
+
+        date_to = filters.get("date_to", "").strip()
+        if date_to and parse_date(date_to):
+            valid_filters["date_to"] = date_to
+
+        archived = filters.get("archived", "").strip()
+        if archived == "true":
+            valid_filters["archived"] = archived
+
+        sort = filters.get("sort", "").strip()
+        if sort and sort in allowed_sorts and sort != "newest":
+            valid_filters["sort"] = sort
+
+        return valid_filters
+
     def get_current_filters(self):
         return {
             "q": self.request.GET.get("q", ""),
@@ -243,14 +289,15 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
     
     def post(self, request, *args, **kwargs):
         if request.POST.get("action") == "save_filter":
-            name = request.POST.get("name", "").strip()
+            name = " ".join(request.POST.get("name", "").split())
 
             if name:
-                filters = {
-                    k: v
-                    for k, v in self.get_current_filters().items()
-                    if v not in ("", "newest")
-                }
+                max_length = SavedFilter._meta.get_field("name").max_length
+                if len(name) > max_length:
+                    messages.error(request, f"Filter name must be {max_length} characters or fewer.")
+                    return redirect(request.get_full_path())
+
+                filters = self.get_valid_saved_filters(self.get_current_filters())
 
                 SavedFilter.objects.update_or_create(
                     owner=request.user,
@@ -265,13 +312,23 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
             return redirect(request.get_full_path())
         
         if request.POST.get("action") == "update_status":
-            application = get_object_or_404(
-                self.request.user.applications,
-                id=self.request.POST.get("application_id"),
-            )
-            application.status = self.request.POST.get("status")
-            application.save()
-            messages.success(request, "Status Updated.")
+            application_id = request.POST.get("application_id", "").strip()
+            application = request.user.applications.filter(pk=application_id).first()
+            if not application:
+                messages.error(request, "Application not found.")
+                return redirect(request.get_full_path())
+            
+            status = request.POST.get("status", "").strip()
+            allowed_statuses = {value for value, _ in Application.STATUS_CHOICES}
+            if status not in allowed_statuses:
+                messages.error(request, "Invalid status.")
+                return redirect(request.get_full_path())
+
+            if application.status != status:
+                application.status = status
+                application.save()
+                messages.success(request, "Status updated.")
+            
 
         return redirect("applications:application-list")
 
