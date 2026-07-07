@@ -3,10 +3,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from .emails import send_verification_email
+from .emails import send_email_change_request_email, send_verification_email
+from .models import EmailChangeRequest
 from .tokens import build_verification_url
 from core.email import attach_default_inline_images
 
@@ -67,3 +69,29 @@ def send_password_reset_email_task(
         attach_default_inline_images(email_message)
 
     email_message.send()
+
+
+def send_email_change_request_email_task(email_change_request_id, domain, scheme):
+    email_change_request = (
+        EmailChangeRequest.objects
+        .select_related("user")
+        .filter(pk=email_change_request_id)
+        .first()
+    )
+
+    if email_change_request is None:
+        return
+
+    confirmation_path = reverse(
+        "accounts:email-change-confirm",
+        kwargs={"token": email_change_request.token},
+    )
+    confirmation_url = (
+        f"{scheme}://{domain}{confirmation_path}"
+    )
+
+    send_email_change_request_email(
+        email_change_request.user,
+        email_change_request.new_email,
+        confirmation_url,
+    )

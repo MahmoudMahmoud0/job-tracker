@@ -1,0 +1,289 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ar\n"
+
+msgid "Job Tracker"
+msgstr "متتبع الوظائف"
+
+msgid "Job Tracker logo"
+msgstr "شعار متتبع الوظائف"
+
+msgid "Applications, interviews, and follow-ups"
+msgstr "الطلبات والمقابلات والمتابعات"
+
+msgid "Close main menu"
+msgstr "إغلاق القائمة الرئيسية"
+
+msgid "Workspace"
+msgstr "مساحة العمل"
+
+msgid "Add Application"
+msgstr "إضافة طلب"
+
+msgid "Update Pipeline"
+msgstr "تحديث مسار التقديم"
+
+msgid "Schedule Interview"
+msgstr "جدولة مقابلة"
+
+msgid "Follow-up Notes"
+msgstr "ملاحظات المتابعة"
+
+msgid "Applications"
+msgstr "الطلبات"
+
+msgid "Companies"
+msgstr "الشركات"
+
+msgid "Interviews"
+msgstr "المقابلات"
+
+msgid "Reports"
+msgstr "التقارير"
+
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgid "Admin"
+msgstr "الإدارة"
+
+msgid "Log in"
+msgstr "تسجيل الدخول"
+
+msgid "Get Started"
+msgstr "ابدأ الآن"
+
+msgid "My Profile"
+msgstr "ملفي الشخصي"
+
+msgid "Log out"
+msgstr "تسجيل الخروج"
+
+msgid "Open main menu"
+msgstr "فتح القائمة الرئيسية"
+
+msgid "My Account"
+msgstr "حسابي"
+
+msgid "Edit your account settings"
+msgstr "عدل إعدادات حسابك"
+
+msgid "Update your profile, reminder preferences, timezone, and export defaults from one calm workspace."
+msgstr "حدّث ملفك الشخصي وتفضيلات التذكير والمنطقة الزمنية وإعدادات التصدير الافتراضية من مساحة عمل واحدة هادئة."
+
+msgid "Profile"
+msgstr "الملف الشخصي"
+
+msgid "Keep your name details current so your workspace stays personal and organized."
+msgstr "حافظ على تحديث بيانات اسمك ليبقى حسابك شخصيًا ومنظمًا."
+
+msgid "Account"
+msgstr "الحساب"
+
+msgid "First name"
+msgstr "الاسم الأول"
+
+msgid "Last name"
+msgstr "اسم العائلة"
+
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+msgid "Use the change email flow below to update your sign-in address."
+msgstr "استخدم مسار تغيير البريد أدناه لتحديث عنوان تسجيل الدخول."
+
+msgid "Change email"
+msgstr "تغيير البريد الإلكتروني"
+
+msgid "Preferences"
+msgstr "التفضيلات"
+
+msgid "Tune reminders and exports to match the way you keep your job search moving."
+msgstr "اضبط التذكيرات وعمليات التصدير بما يناسب طريقة إدارتك للبحث عن عمل."
+
+msgid "Reminder emails"
+msgstr "رسائل التذكير"
+
+msgid "Send me reminder emails"
+msgstr "أرسل لي رسائل تذكير"
+
+msgid "Reminder lead time"
+msgstr "مهلة التذكير"
+
+msgid "Timezone"
+msgstr "المنطقة الزمنية"
+
+msgid "Locale"
+msgstr "اللغة"
+
+msgid "Default export format"
+msgstr "تنسيق التصدير الافتراضي"
+
+msgid "Auto delete exports"
+msgstr "الحذف التلقائي لعمليات التصدير"
+
+msgid "Automatically remove old exports"
+msgstr "احذف عمليات التصدير القديمة تلقائيًا"
+
+msgid "Export retention"
+msgstr "مدة الاحتفاظ بالتصدير"
+
+msgid "Security"
+msgstr "الأمان"
+
+msgid "Want to refresh your credentials? Update your password from a dedicated secure screen."
+msgstr "هل تريد تحديث بيانات الاعتماد؟ حدّث كلمة المرور من شاشة آمنة مخصصة."
+
+msgid "Change password"
+msgstr "تغيير كلمة المرور"
+
+msgid "Save changes"
+msgstr "حفظ التغييرات"
+
+msgid "Create your account and get started"
+msgstr "أنشئ حسابك وابدأ"
+
+msgid "Organize your applications in one place with a clean workflow and a calmer job search routine."
+msgstr "نظّم طلباتك في مكان واحد بسير عمل واضح وروتين بحث عن عمل أكثر هدوءًا."
+
+msgid "Signup"
+msgstr "إنشاء حساب"
+
+msgid "Already have an account?"
+msgstr "هل لديك حساب بالفعل؟"
+
+msgid "Go to login"
+msgstr "اذهب إلى تسجيل الدخول"
+
+msgid "Looks like you already have an account"
+msgstr "يبدو أن لديك حسابًا بالفعل"
+
+msgid "Welcome back to your job search workspace"
+msgstr "مرحبًا بعودتك إلى مساحة عمل البحث عن الوظائف"
+
+msgid "Sign in to review applications, track interviews, and keep your follow-ups moving without losing momentum."
+msgstr "سجّل الدخول لمراجعة الطلبات وتتبع المقابلات والحفاظ على استمرار متابعاتك دون فقدان الزخم."
+
+msgid "Forgot password?"
+msgstr "هل نسيت كلمة المرور؟"
+
+msgid "Need a new verification email?"
+msgstr "هل تحتاج إلى رسالة تحقق جديدة؟"
+
+msgid "Send verification email"
+msgstr "إرسال رسالة التحقق"
+
+msgid "Want to reactivate your account?"
+msgstr "هل تريد إعادة تفعيل حسابك؟"
+
+msgid "Reactivate my account"
+msgstr "أعد تفعيل حسابي"
+
+msgid "New here?"
+msgstr "جديد هنا؟"
+
+msgid "Create an account"
+msgstr "أنشئ حسابًا"
+
+msgid "Change your password."
+msgstr "غيّر كلمة المرور."
+
+msgid "Enter your current password and choose a new one to keep your Job Tracker account secure."
+msgstr "أدخل كلمة المرور الحالية واختر كلمة جديدة للحفاظ على أمان حسابك."
+
+msgid "Save new password"
+msgstr "حفظ كلمة المرور الجديدة"
+
+msgid "Need a password reset instead?"
+msgstr "هل تحتاج إلى إعادة تعيين كلمة المرور بدلًا من ذلك؟"
+
+msgid "Reset by email"
+msgstr "إعادة التعيين عبر البريد الإلكتروني"
+
+msgid "Password Updated"
+msgstr "تم تحديث كلمة المرور"
+
+msgid "Your password has been changed."
+msgstr "تم تغيير كلمة المرور الخاصة بك."
+
+msgid "Your account now uses the new password. You can continue working or return to your account settings any time."
+msgstr "يستخدم حسابك الآن كلمة المرور الجديدة. يمكنك متابعة العمل أو العودة إلى إعدادات الحساب في أي وقت."
+
+msgid "Security update complete"
+msgstr "اكتمل تحديث الأمان"
+
+msgid "If you did not make this change, reset your password again immediately and review your account activity."
+msgstr "إذا لم تقم بهذا التغيير، فأعد تعيين كلمة المرور فورًا وراجع نشاط حسابك."
+
+msgid "Back to account"
+msgstr "العودة إلى الحساب"
+
+msgid "Go to homepage"
+msgstr "اذهب إلى الصفحة الرئيسية"
+
+msgid "Current password"
+msgstr "كلمة المرور الحالية"
+
+msgid "Your current password is incorrect."
+msgstr "كلمة المرور الحالية غير صحيحة."
+
+msgid "Enter a different email address."
+msgstr "أدخل عنوان بريد إلكتروني مختلفًا."
+
+msgid "An account with this email already exists."
+msgstr "يوجد حساب بهذا البريد الإلكتروني بالفعل."
+
+msgid "An account with this email already exists. Try logging in instead."
+msgstr "يوجد حساب بهذا البريد الإلكتروني بالفعل. جرّب تسجيل الدخول بدلًا من ذلك."
+
+msgid "Please enter a correct email and password. Note that both fields may be case-sensitive."
+msgstr "يرجى إدخال بريد إلكتروني وكلمة مرور صحيحين. لاحظ أن كلا الحقلين قد يكونان حساسين لحالة الأحرف."
+
+msgid "This email has not been verified yet."
+msgstr "لم يتم التحقق من هذا البريد الإلكتروني بعد."
+
+msgid "This account is inactive right now."
+msgstr "هذا الحساب غير نشط حاليًا."
+
+msgid "Verification Email Sent"
+msgstr "تم إرسال رسالة التحقق"
+
+msgid "Check your inbox to activate your account."
+msgstr "تحقق من صندوق الوارد لتفعيل حسابك."
+
+msgid "We sent a verification email to your address. Open the link in that message to activate your Job Tracker account and sign in."
+msgstr "أرسلنا رسالة تحقق إلى عنوانك. افتح الرابط في تلك الرسالة لتفعيل حسابك وتسجيل الدخول."
+
+msgid "Back to login"
+msgstr "العودة إلى تسجيل الدخول"
+
+msgid "A fresh verification link is on its way."
+msgstr "رابط تحقق جديد في طريقه إليك."
+
+msgid "If that email address matches an unverified account, we have sent a new verification email. Open it to finish confirming your account."
+msgstr "إذا كان عنوان البريد هذا يطابق حسابًا غير موثّق، فقد أرسلنا رسالة تحقق جديدة. افتحها لإكمال تأكيد حسابك."
+
+msgid "Create a new account"
+msgstr "أنشئ حسابًا جديدًا"
+
+msgid "Reactivation Email Sent"
+msgstr "تم إرسال رسالة إعادة التفعيل"
+
+msgid "Check your inbox to reactivate your account."
+msgstr "تحقق من صندوق الوارد لإعادة تفعيل حسابك."
+
+msgid "If that email address matches an inactive account, we have sent a reactivation email. Open the link in that message to reactivate your access."
+msgstr "إذا كان عنوان البريد هذا يطابق حسابًا غير نشط، فقد أرسلنا رسالة إعادة تفعيل. افتح الرابط في تلك الرسالة لإعادة تفعيل الوصول."
+
+msgid "Email Change Requested"
+msgstr "تم طلب تغيير البريد الإلكتروني"
+
+msgid "Check your new inbox to confirm the change."
+msgstr "تحقق من صندوق الوارد الجديد لتأكيد التغيير."
+
+msgid "We sent a confirmation message to %(email)s. Open the link in that email to continue updating your account email."
+msgstr "أرسلنا رسالة تأكيد إلى %(email)s. افتح الرابط في تلك الرسالة لمتابعة تحديث بريد حسابك."
+
+msgid "Request another email change"
+msgstr "اطلب تغيير بريد آخر"

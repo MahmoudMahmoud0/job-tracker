@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load tailwind_filters %}
-{% load static %}
+{% load static i18n %}
 {% block content %}
 
 <main class="min-h-screen flex flex-col justify-center p-4 md:p-8">
    <div class="w-full max-w-lg mx-auto sm:max-w-4xl">
       <div class="mb-12">
-         <h1 class="mt-6 text-3xl font-semibold tracking-tight text-slate-800 md:text-4xl">Create your account and get started</h1>
-         <p class="mt-3 max-w-xl text-sm leading-6 text-slate-600 md:text-base">Organize your applications in one place with a clean workflow and a calmer job search routine.</p>
+         <h1 class="mt-6 text-3xl font-semibold tracking-tight text-slate-800 md:text-4xl">{% trans "Create your account and get started" %}</h1>
+         <p class="mt-3 max-w-xl text-sm leading-6 text-slate-600 md:text-base">{% trans "Organize your applications in one place with a clean workflow and a calmer job search routine." %}</p>
       </div>
 
       <div class="max-w-lg mx-auto rounded-3xl border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
@@ -20,7 +20,7 @@
                   id="signup-btn"
                   class="flex items-center justify-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-white disabled:cursor-not-allowed disabled:bg-blue-400 hover:bg-blue-600"
                   type="submit">
-                  <span id="signup-text">Signup</span>
+                  <span id="signup-text">{% trans "Signup" %}</span>
                   <svg
                      id="signup-spinner"
                      class="hidden h-5 w-5 animate-spin"
@@ -48,16 +48,16 @@
          {% if not form.existing_account_email %}
          <div class="mt-6 border-t border-slate-200 pt-5 text-center text-sm text-slate-600">
             <p>
-               Already have an account?
+               {% trans "Already have an account?" %}
                <a href="{% url 'accounts:login' %}" class="font-semibold text-blue-600 transition-colors hover:text-blue-700">
-                  Go to login
+                  {% trans "Go to login" %}
                </a>
             </p>
          </div>
          {% endif %}
          {% if form.existing_account_email %}
          <div class="mt-6 rounded-2xl border border-blue-200 bg-blue-50/80 p-5 text-sm text-blue-900">
-            <h2 class="text-base font-semibold text-blue-950">Looks like you already have an account</h2>
+            <h2 class="text-base font-semibold text-blue-950">{% trans "Looks like you already have an account" %}</h2>
             <p class="mt-2 leading-6">
                You can head straight to login with <span class="font-semibold">{{ form.existing_account_email }}</span>.
                If that account is unverified or inactive, we will help you recover access there.
@@ -66,7 +66,7 @@
                <a
                   href="{% url 'accounts:login' %}?username={{ form.existing_account_email|urlencode }}"
                   class="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
-                  Go to login
+                  {% trans "Go to login" %}
                </a>
             </div>
          </div>

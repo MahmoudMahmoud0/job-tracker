@@ -5,7 +5,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth import authenticate
 from django.contrib.sites.shortcuts import get_current_site
-from .models import User
+from .models import EmailChangeRequest, User
 from django import forms
 from django.core.exceptions import ValidationError
 from django_q.tasks import async_task
@@ -136,3 +136,36 @@ class BrandedPasswordResetForm(PasswordResetForm):
                 html_email_template_name=html_email_template_name,
                 extra_email_context=extra_email_context,
             )
+
+class EmailChangeRequestForm(forms.ModelForm):
+    current_password = forms.CharField(
+        label=_("Current password"),
+        widget=forms.PasswordInput,
+    )
+
+    class Meta:
+        model = EmailChangeRequest
+        fields = ["new_email"]
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
+    def clean_current_password(self):
+        password = self.cleaned_data["current_password"]
+
+        if not self.user.check_password(password):
+            raise forms.ValidationError(_("Your current password is incorrect."))
+
+        return password
+
+    def clean_new_email(self):
+        new_email = self.cleaned_data["new_email"]
+
+        if self.user and self.user.email.lower() == new_email.lower():
+            raise forms.ValidationError(_("Enter a different email address."))
+
+        if User._default_manager.filter(email__iexact=new_email).exists():
+            raise forms.ValidationError(_("An account with this email already exists."))
+
+        return new_email

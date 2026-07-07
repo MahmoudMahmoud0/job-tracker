@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+
+{% block content %}
+<main class="min-h-screen flex flex-col p-4 md:p-8">
+   <div class="w-full max-w-lg mx-auto sm:max-w-4xl">
+      <div class="mb-12">
+         <p class="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">
+            Email Change
+         </p>
+         <h1 class="mt-6 text-3xl font-semibold tracking-tight text-slate-800 md:text-4xl">
+            Change your email address.
+         </h1>
+         <p class="mt-3 max-w-xl text-sm leading-6 text-slate-600 md:text-base">
+            Enter the new email you want to use for Job Tracker, then confirm with your current password before we send the verification step.
+         </p>
+      </div>
+
+      <div class="max-w-lg mx-auto rounded-3xl border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+         <div class="mb-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Current email</p>
+            <p class="mt-2 break-all text-base font-semibold text-slate-900">{{ request.user.email }}</p>
+         </div>
+
+         <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <button class="mt-6 inline-flex w-full items-center justify-center rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700" type="submit">
+               Request email change
+            </button>
+         </form>
+
+         <div class="mt-6 border-t border-slate-200 pt-5 text-center text-sm text-slate-600">
+            <p>
+               Want to review the rest of your account first?
+               <a class="font-semibold text-blue-600 transition-colors hover:text-blue-700" href="{% url 'accounts:me' %}">Back to account settings</a>
+            </p>
+         </div>
+      </div>
+   </div>
+</main>
+{% endblock content %}

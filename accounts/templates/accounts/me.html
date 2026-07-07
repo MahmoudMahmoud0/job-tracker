@@ -1,19 +1,20 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 <main class="min-h-screen flex flex-col items-center p-4 md:p-8">
    <div class="mx-auto flex w-full max-w-5xl flex-col items-center">
       <section class="mb-10 text-center">
          <p class="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">
-            My Account
+            {% trans "My Account" %}
          </p>
          <div class="mt-6 flex flex-col items-center gap-6">
             <div class="flex flex-col items-center">
                <h1 class="text-3xl font-semibold tracking-tight text-slate-800 md:text-4xl">
-                  Edit your account settings
+                  {% trans "Edit your account settings" %}
                </h1>
                <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 md:text-base">
-                  Update your profile, reminder preferences, timezone, and export defaults from one calm workspace.
+                  {% trans "Update your profile, reminder preferences, timezone, and export defaults from one calm workspace." %}
                </p>
             </div>
          </div>
@@ -32,20 +33,20 @@
             <article class="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
                <div class="flex flex-col items-center gap-4 text-center">
                   <div class="flex flex-col items-center">
-                     <h2 class="text-xl font-semibold text-slate-900">Profile</h2>
+                     <h2 class="text-xl font-semibold text-slate-900">{% trans "Profile" %}</h2>
                      <p class="mt-2 text-sm leading-6 text-slate-600">
-                        Keep your name details current so your workspace stays personal and organized.
+                        {% trans "Keep your name details current so your workspace stays personal and organized." %}
                      </p>
                   </div>
                   <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                     Account
+                     {% trans "Account" %}
                   </span>
                </div>
 
                <div class="mt-8 grid gap-4 sm:grid-cols-2">
                   <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
                      <label for="{{ form.first_name.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                        First name
+                         {% trans "First name" %}
                      </label>
                      <div class="mt-3">
                         <input
@@ -62,7 +63,7 @@
 
                   <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
                      <label for="{{ form.last_name.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                        Last name
+                         {% trans "Last name" %}
                      </label>
                      <div class="mt-3">
                         <input
@@ -76,26 +77,50 @@
                      <p class="mt-2 text-sm text-rose-600">{{ form.last_name.errors|join:", " }}</p>
                      {% endif %}
                   </div>
+
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center sm:col-span-2">
+                     <label class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                         {% trans "Email" %}
+                     </label>
+                     <div class="mt-3">
+                        <input
+                           type="email"
+                           value="{{ request.user.email }}"
+                           disabled
+                           class="w-full rounded-2xl border border-slate-200 bg-slate-100 px-4 py-3 text-center text-slate-600 outline-none">
+                     </div>
+                     <p class="mt-2 text-sm text-slate-500">
+                        {% trans "Use the change email flow below to update your sign-in address." %}
+                     </p>
+                  </div>
+               </div>
+
+               <div class="mt-6 flex justify-center">
+                  <a
+                     href="{% url 'accounts:email-change' %}"
+                     class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50">
+                     {% trans "Change email" %}
+                  </a>
                </div>
             </article>
 
             <article class="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
                <div class="flex flex-col items-center gap-4 text-center">
                   <div class="flex flex-col items-center">
-                     <h2 class="text-xl font-semibold text-slate-900">Preferences</h2>
+                     <h2 class="text-xl font-semibold text-slate-900">{% trans "Preferences" %}</h2>
                      <p class="mt-2 text-sm leading-6 text-slate-600">
-                        Tune reminders and exports to match the way you keep your job search moving.
+                        {% trans "Tune reminders and exports to match the way you keep your job search moving." %}
                      </p>
                   </div>
                   <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">
-                     Settings
+                     {% trans "Settings" %}
                   </span>
                </div>
 
                <div class="mt-8 grid gap-4 sm:grid-cols-2">
                   <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center sm:col-span-2">
                      <label for="{{ form.reminder_email_notifier.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                        Reminder emails
+                        {% trans "Reminder emails" %}
                      </label>
                      <div class="mt-4 flex items-center justify-center gap-3">
                         <input
@@ -104,7 +129,7 @@
                            id="{{ form.reminder_email_notifier.id_for_label }}"
                            class="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                            {% if form.reminder_email_notifier.value %}checked{% endif %}>
-                        <span class="text-sm font-medium text-slate-700">Send me reminder emails</span>
+                        <span class="text-sm font-medium text-slate-700">{% trans "Send me reminder emails" %}</span>
                      </div>
                      {% if form.reminder_email_notifier.errors %}
                      <p class="mt-2 text-sm text-rose-600">{{ form.reminder_email_notifier.errors|join:", " }}</p>
@@ -113,7 +138,7 @@
 
                   <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
                      <label for="{{ form.reminder_lead_time.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                        Reminder lead time
+                        {% trans "Reminder lead time" %}
                      </label>
                      <div class="mt-3">
                         <input
@@ -131,7 +156,7 @@
 
                   <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
                      <label for="{{ form.timezone.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                        Timezone
+                        {% trans "Timezone" %}
                      </label>
                      <div class="mt-3">
                         <select
@@ -149,8 +174,27 @@
                   </div>
 
                   <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
+                     <label for="{{ form.locale.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                        {% trans "Locale" %}
+                     </label>
+                     <div class="mt-3">
+                        <select
+                           name="{{ form.locale.html_name }}"
+                           id="{{ form.locale.id_for_label }}"
+                           class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-center text-slate-900 outline-none transition focus:border-blue-400 focus:ring-4 focus:ring-blue-100">
+                           {% for value, label in form.fields.locale.choices %}
+                           <option value="{{ value }}" {% if form.locale.value == value %}selected{% endif %}>{{ label }}</option>
+                           {% endfor %}
+                        </select>
+                     </div>
+                     {% if form.locale.errors %}
+                     <p class="mt-2 text-sm text-rose-600">{{ form.locale.errors|join:", " }}</p>
+                     {% endif %}
+                  </div>
+
+                  <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
                      <label for="{{ form.export_format.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                        Default export format
+                        {% trans "Default export format" %}
                      </label>
                      <div class="mt-3">
                         <select
@@ -169,7 +213,7 @@
 
                   <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
                      <label for="{{ form.auto_delete_exports.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                        Auto delete exports
+                        {% trans "Auto delete exports" %}
                      </label>
                      <div class="mt-4 flex items-center justify-center gap-3">
                         <input
@@ -178,7 +222,7 @@
                            id="{{ form.auto_delete_exports.id_for_label }}"
                            class="h-5 w-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                            {% if form.auto_delete_exports.value %}checked{% endif %}>
-                        <span class="text-sm font-medium text-slate-700">Automatically remove old exports</span>
+                        <span class="text-sm font-medium text-slate-700">{% trans "Automatically remove old exports" %}</span>
                      </div>
                      {% if form.auto_delete_exports.errors %}
                      <p class="mt-2 text-sm text-rose-600">{{ form.auto_delete_exports.errors|join:", " }}</p>
@@ -187,7 +231,7 @@
 
                   <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-center">
                      <label for="{{ form.retain_export_days.id_for_label }}" class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                        Export retention
+                        {% trans "Export retention" %}
                      </label>
                      <div class="mt-3">
                         <input
@@ -205,11 +249,25 @@
                </div>
             </article>
 
+            <article class="rounded-3xl border border-white/70 bg-white/80 p-6 text-center shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+               <h2 class="text-xl font-semibold text-slate-900">{% trans "Security" %}</h2>
+               <p class="mt-2 text-sm leading-6 text-slate-600">
+                  {% trans "Want to refresh your credentials? Update your password from a dedicated secure screen." %}
+               </p>
+               <div class="mt-6 flex justify-center">
+                  <a
+                     href="{% url 'accounts:password_change' %}"
+                     class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50">
+                     {% trans "Change password" %}
+                  </a>
+               </div>
+            </article>
+
             <div class="flex justify-center">
                <button
                   type="submit"
                   class="inline-flex items-center justify-center rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-                  Save changes
+                   {% trans "Save changes" %}
                </button>
             </div>
          </form>
