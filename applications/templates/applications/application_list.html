@@ -176,6 +176,42 @@
                         Reset
                     </a>
                 {% endif %}
+
+
+                <details class="relative">
+                    <summary
+                        class="inline-flex cursor-pointer list-none items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-100">
+                        Save filter
+                    </summary>
+
+                    <div class="absolute left-0 z-20 mt-3 w-80 rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.16)]">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="save_filter">
+
+                            <label
+                                for="id_filter_name"
+                                class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                                Filter name
+                            </label>
+
+                            <input
+                                id="id_filter_name"
+                                type="text"
+                                name="name"
+                                placeholder="e.g. Backend Roles"
+                                class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                required>
+
+                            <button
+                                type="submit"
+                                class="mt-5 inline-flex items-center rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+                                Save filter
+                            </button>
+                        </form>
+                    </div>
+                </details>
+
             </div>
 
             {% if has_active_filters %}
@@ -275,6 +311,48 @@
                             >
                                 Delete
                             </a>
+                        <details class="relative">
+                            <summary
+                                class="inline-flex cursor-pointer list-none items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
+                                Update Status
+                            </summary>
+
+                            <div class="absolute left-0 z-20 mt-3 w-80 rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.16)]">
+                                <form method="post" class="space-y-5">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="update_status">
+                                    <input type="hidden" name="application_id" value="{{ application.pk }}">
+
+                                    <div>
+                                        <label
+                                            for="id_status_{{ application.pk }}"
+                                            class="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                                            Status
+                                        </label>
+
+                                        <select
+                                            id="id_status_{{ application.pk }}"
+                                            name="status"
+                                            required
+                                            class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                                            {% for value, label in application.STATUS_CHOICES %}
+                                                <option value="{{ value }}" {% if application.status == value %}selected{% endif %}>
+                                                    {{ label }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="flex justify-end">
+                                        <button
+                                            type="submit"
+                                            class="inline-flex items-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
+                                            Update Status
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </details>
                         </div>
                     </article>
                 {% endfor %}

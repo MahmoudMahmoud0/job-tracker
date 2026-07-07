@@ -3,7 +3,9 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
 from django.utils.dateparse import parse_date
-from .models import Application
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib import messages
+from .models import Application, SavedFilter
 from .forms import ApplicationForm
 from .mixins import ApplicationCompanyMixin, ApplicationTagBuilderMixin
 
@@ -49,7 +51,23 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
         return query_params.urlencode()
 
     def get_quick_filters(self):
-        return [
+        current_filters = {
+            k: v
+            for k, v in self.get_current_filters().items()
+            if v not in ("", "newest")
+        }        
+        saved_filters = []
+        for saved_filter in self.request.user.saved_filters.all():
+            saved_filters.append({
+                "label": saved_filter.name,
+                "active": saved_filter.filters == current_filters,
+                "query_string": self.build_query_string(
+                    **saved_filter.filters,
+                    page=None,
+                ),
+            })
+
+        return saved_filters + [
             {
                 "label": "Active",
                 "active": self.request.GET.get("archived", "") != "true",
@@ -222,6 +240,41 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
         context["has_active_filters"] = bool(active_filter_chips)
         context["query_string"] = query_params.urlencode()
         return context
+    
+    def post(self, request, *args, **kwargs):
+        if request.POST.get("action") == "save_filter":
+            name = request.POST.get("name", "").strip()
+
+            if name:
+                filters = {
+                    k: v
+                    for k, v in self.get_current_filters().items()
+                    if v not in ("", "newest")
+                }
+
+                SavedFilter.objects.update_or_create(
+                    owner=request.user,
+                    name=name,
+                    defaults={
+                        "filters": filters,
+                    },
+                )
+
+                messages.success(request, "Filter saved.")
+
+            return redirect(request.get_full_path())
+        
+        if request.POST.get("action") == "update_status":
+            application = get_object_or_404(
+                self.request.user.applications,
+                id=self.request.POST.get("application_id"),
+            )
+            application.status = self.request.POST.get("status")
+            application.save()
+            messages.success(request, "Status Updated.")
+
+        return redirect("applications:application-list")
+
 
 class ApplicationCreateView(ApplicationCompanyMixin, ApplicationTagBuilderMixin, LoginRequiredMixin, generic.CreateView):
     model = Application
