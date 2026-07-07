@@ -7,4 +7,5 @@ urlpatterns = [
     path('', LandingPageView.as_view(), name="landing"),
     path('accounts/', include("accounts.urls", namespace="accounts")),
     path('companies/', include("companies.urls", namespace="companies")),
+    path('applications/', include("applications.urls", namespace="applications")),
 ]

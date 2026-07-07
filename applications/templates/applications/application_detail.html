@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="py-10 md:py-14">
+    <section class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div class="max-w-3xl">
+                <a href="{% url 'applications:application-list' %}" class="text-sm font-semibold text-blue-600 transition hover:text-blue-700">
+                    Back to applications
+                </a>
+                <p class="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">Application Profile</p>
+                <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">{{ application.title }}</h1>
+                <p class="mt-3 text-base font-medium text-slate-600">{{ application.company.name }}</p>
+                <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+                    Review the role details, status, and notes before your next interview, follow-up, or application update.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <a
+                    href="{% url 'applications:application-update' application.pk %}"
+                    class="inline-flex items-center rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                >
+                    Edit application
+                </a>
+                <a
+                    href="{% url 'applications:application-delete' application.pk %}"
+                    class="inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-5 py-3 text-sm font-semibold text-rose-700 transition hover:border-rose-300 hover:bg-rose-100"
+                >
+                    Delete
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-8 grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
+            <div class="rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-6 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">At a glance</p>
+                <dl class="mt-5 space-y-5">
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Status</dt>
+                        <dd class="mt-2 text-sm text-slate-700">{{ application.get_status_display }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Source</dt>
+                        <dd class="mt-2 text-sm text-slate-700">
+                            {% if application.source %}{{ application.get_source_display }}{% else %}<span class="text-slate-400">Not added</span>{% endif %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Department</dt>
+                        <dd class="mt-2 text-sm text-slate-700">
+                            {% if application.department %}{{ application.department }}{% else %}<span class="text-slate-400">Not added</span>{% endif %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Applied Date</dt>
+                        <dd class="mt-2 text-sm text-slate-700">
+                            {% if application.applied_at %}{{ application.applied_at|date:"M j, Y" }}{% else %}<span class="text-slate-400">Not added</span>{% endif %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Tags</dt>
+                        <dd class="mt-2">
+                            {% if application.tags.all %}
+                                <div class="flex flex-wrap gap-2">
+                                    {% for tag in application.tags.all %}
+                                        <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                                            {{ tag.name }}
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <span class="text-sm text-slate-400">No tags added</span>
+                            {% endif %}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-sm">
+                <div class="flex flex-wrap items-center gap-3">
+                    <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">
+                        Created {{ application.created_at|date:"M j, Y" }}
+                    </span>
+                    <span class="rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">
+                        Updated {{ application.updated_at|date:"M j, Y" }}
+                    </span>
+                    {% if application.archived %}
+                        <span class="rounded-full bg-slate-200 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">
+                            Archived
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                    <div class="rounded-[1.25rem] bg-slate-50/80 p-5">
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Salary Range</p>
+                        <p class="mt-3 text-sm leading-7 text-slate-700">
+                            {% if application.salary_min or application.salary_max %}
+                                {% if application.salary_min %}{{ application.salary_min }}{% else %}-{% endif %}
+                                to
+                                {% if application.salary_max %}{{ application.salary_max }}{% else %}-{% endif %}
+                                {{ application.currency }}
+                            {% else %}
+                                Not added yet
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="rounded-[1.25rem] bg-slate-50/80 p-5">
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Company</p>
+                        <p class="mt-3 text-sm leading-7 text-slate-700">{{ application.company.name }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Notes</p>
+                    <div class="mt-3 rounded-[1.25rem] bg-slate-50/80 p-5">
+                        <p class="whitespace-pre-line text-sm leading-7 text-slate-700">
+                            {% if application.notes %}
+                                {{ application.notes }}
+                            {% else %}
+                                No notes yet. Add what matters here so future follow-ups and interviews start with context.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}

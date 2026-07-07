@@ -63,8 +63,8 @@ class CompanyUpdateView(LoginRequiredMixin, generic.UpdateView):
     def get_success_url(self):
         return reverse_lazy("companies:company-detail", kwargs={"pk": self.object.pk},)
     
-    def form_valid(self, form):
-        comapy = form.save(commit=False)
-        comapy.updated_at = timezone.now()
-        comapy.save()
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     comapy = form.save(commit=False)
+    #     comapy.updated_at = timezone.now()
+    #     comapy.save()
+    #     return super().form_valid(form)

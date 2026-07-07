@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static tailwind_filters %}
+
+{% block content %}
+<main class="py-10 md:py-14">
+    <div class="mx-auto max-w-4xl">
+        <div class="mb-10">
+            <a href="{% url 'applications:application-detail' application.pk %}" class="text-sm font-semibold text-blue-600 transition hover:text-blue-700">
+                Back to {{ application.title }}
+            </a>
+            <p class="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">Update Application</p>
+            <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">Refresh the details for {{ application.title }}.</h1>
+            <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+                Keep the application current so the latest status, dates, and notes are ready when you need them.
+            </p>
+        </div>
+
+        <section class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+            <form method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="mb-6 rounded-[1.25rem] border border-rose-200 bg-rose-50/80 p-4 text-sm text-rose-700">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                {{ form.title|as_crispy_field }}
+                {{ form.company|as_crispy_field }}
+                <details class="mt-4" {% if show_quick_company %}open{% endif %}>
+                    <summary class="inline-flex cursor-pointer list-none items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-slate-400 hover:bg-slate-50">
+                        Quick add company
+                    </summary>
+                    <div class="mt-3 rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-5">
+                        <p class="text-sm text-slate-600">Use this if the company is not already in the dropdown.</p>
+                        <div class="mt-4">
+                        {{ form.quick_company_name|as_crispy_field }}
+                        </div>
+                    </div>
+                </details>
+                <div class="mt-6">
+                    {{ form.department|as_crispy_field }}
+                </div>
+                {{ form.source|as_crispy_field }}
+                {{ form.status|as_crispy_field }}
+                {{ form.salary_min|as_crispy_field }}
+                {{ form.salary_max|as_crispy_field }}
+                {{ form.applied_at|as_crispy_field }}
+                {{ form.notes|as_crispy_field }}
+
+                <div class="mt-6 rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-5">
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
+                            <label for="existing-tag-search" class="text-sm font-semibold text-slate-900">Tags</label>
+                            <p class="mt-1 text-sm text-slate-600">{{ form.fields.tags.help_text }}</p>
+                        </div>
+                        <div class="w-full sm:max-w-xs">
+                            <input
+                                id="existing-tag-search"
+                                type="search"
+                                placeholder="Search existing tags"
+                                class="w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                            >
+                        </div>
+                    </div>
+
+                    <div id="existing-tag-picker" class="mt-4 flex max-h-40 flex-wrap gap-3 overflow-y-auto pr-2">
+                        {% for tag in existing_tag_picker %}
+                            <label
+                                class="existing-tag-option inline-flex cursor-pointer items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-100"
+                                data-tag-name="{{ tag.name|lower }}"
+                            >
+                                <input
+                                    type="checkbox"
+                                    name="tags"
+                                    value="{{ tag.id }}"
+                                    {% if tag.selected %}checked{% endif %}
+                                    class="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                                >
+                                <span
+                                    class="existing-tag-color-dot inline-flex h-3 w-3 rounded-full border border-white/70"
+                                    data-tag-color="{{ tag.color }}"
+                                ></span>
+                                <span>{{ tag.name }}</span>
+                            </label>
+                        {% empty %}
+                            <p class="text-sm text-slate-500">No existing tags yet. Create your first one below.</p>
+                        {% endfor %}
+                    </div>
+                    <p id="existing-tag-empty" class="mt-3 hidden text-sm text-slate-500">No matching tags found.</p>
+                    {% if form.tags.errors %}
+                        <div class="mt-3 text-sm text-rose-600">
+                            {{ form.tags.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <details class="mt-6" {% if show_new_tags %}open{% endif %}>
+                    <summary class="inline-flex cursor-pointer list-none items-center rounded-full border border-emerald-300 bg-white px-4 py-2 text-sm font-semibold text-emerald-900 transition hover:border-emerald-400 hover:bg-emerald-50">
+                        Quick add tags
+                    </summary>
+                    <div class="mt-3 rounded-[1.5rem] border border-emerald-200/80 bg-emerald-50/70 p-5">
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">New Tags</p>
+                                <p class="mt-1 text-sm text-emerald-900">Add as many new tags as you need. Each row gets its own name and color.</p>
+                            </div>
+                            <button
+                                type="button"
+                                id="add-tag-row"
+                                class="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
+                            >
+                                Add another tag
+                            </button>
+                        </div>
+
+                        <div id="new-tag-rows" class="mt-4 space-y-3">
+                            {% for row in new_tag_rows %}
+                                <div class="tag-row grid gap-3 rounded-[1.25rem] border border-emerald-100 bg-white/90 p-4 md:grid-cols-[1fr_auto_auto] md:items-end">
+                                    <div>
+                                        <label class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Tag name</label>
+                                        <input
+                                            type="text"
+                                            name="new_tag_name"
+                                            value="{{ row.name }}"
+                                            placeholder="Remote, urgent, referral..."
+                                            class="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+                                        >
+                                    </div>
+                                    <div>
+                                        <label class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Color</label>
+                                        <input
+                                            type="color"
+                                            name="new_tag_color"
+                                            value="{{ row.color }}"
+                                            class="mt-2 h-[50px] w-full min-w-20 rounded-2xl border border-slate-300 bg-white px-2 py-2"
+                                        >
+                                    </div>
+                                    <button
+                                        type="button"
+                                        class="remove-tag-row inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </details>
+
+                <div class="mt-6">
+                    {{ form.archived|as_crispy_field }}
+                </div>
+
+                <div class="mt-8 flex flex-wrap items-center gap-3">
+                    <button
+                        type="submit"
+                        class="inline-flex items-center rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                    >
+                        Save changes
+                    </button>
+                    <a
+                        href="{% url 'applications:application-detail' application.pk %}"
+                        class="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'js/application_form.js' %}"></script>
+{% endblock extra_js %}

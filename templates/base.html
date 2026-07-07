@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n static %}
 <!DOCTYPE html>
 
 <html lang="{{ LANGUAGE_CODE }}">
@@ -25,6 +25,9 @@
             {% block content %}
             {% endblock content %}
         </div>
+
+        {% block extra_js %}
+        {% endblock extra_js %}
     </body>
 
 </html>
