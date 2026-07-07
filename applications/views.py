@@ -183,7 +183,16 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
         if date_to_parsed:
             queryset = queryset.filter(applied_at__lte=date_to_parsed)
 
-        allowed_sorts = dict(self.SORT_OPTIONS)
+        allowed_sorts = {
+            "newest": "-created_at",
+            "oldest": "created_at",
+            "applied_newest": "-applied_at",
+            "applied_oldest": "applied_at",
+            "title": "title",
+            "company": "company__name",
+            "salary_high": "-salary_max",
+            "salary_low": "salary_min",
+        }
 
         return queryset.order_by(
             allowed_sorts.get(sort, "-created_at")
