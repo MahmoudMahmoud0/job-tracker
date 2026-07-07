@@ -111,6 +111,7 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
                     **saved_filter.filters,
                     page=None,
                 ),
+                "is_saved": True
             })
 
         return saved_filters + [
@@ -118,26 +119,31 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
                 "label": "Active",
                 "active": self.request.GET.get("archived", "") != "true",
                 "query_string": self.build_query_string(archived="", page=None),
+                "is_saved": False
             },
             {
                 "label": "Archived",
                 "active": self.request.GET.get("archived") == "true",
                 "query_string": self.build_query_string(archived="true", page=None),
+                "is_saved": False
             },
             {
                 "label": "Applied",
                 "active": self.request.GET.get("status") == "applied",
                 "query_string": self.build_query_string(status="applied", page=None),
+                "is_saved": False
             },
             {
                 "label": "Interviewing",
                 "active": self.request.GET.get("status") == "interviewing",
                 "query_string": self.build_query_string(status="interviewing", page=None),
+                "is_saved": False
             },
             {
                 "label": "Offers",
                 "active": self.request.GET.get("status") == "offer",
                 "query_string": self.build_query_string(status="offer", page=None),
+                "is_saved": False
             },
         ]
 
@@ -308,7 +314,18 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
                 )
                 messages.success(request, "Filter saved.")
             return redirect(request.get_full_path())
-        
+
+        if request.POST.get("action") == "delete_filter":
+            filter_name = request.POST.get("filter_name", "").strip()
+            deleted, _ = request.user.saved_filters.filter(name=filter_name).delete()
+
+            if deleted:
+                messages.success(request, "Filter deleted.")
+            else:
+                messages.error(request, "Saved filter not found.")
+
+            return redirect("applications:application-list")
+
         if request.POST.get("action") == "update_status":
             application_id = request.POST.get("application_id", "").strip()
             application = request.user.applications.filter(pk=application_id).first()
