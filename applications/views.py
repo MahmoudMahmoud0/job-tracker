@@ -264,12 +264,16 @@ class ApplicationBaseView(LoginRequiredMixin, generic.View):
             allowed_sorts.get(sort, "-created_at")
         ).distinct()
 
+    def get_view_mode(self):
+        return "kanban" if self.request.GET.get("view") == "kanban" else "list"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         query_params = self.request.GET.copy()
         query_params.pop("page", None)
         current_filters = self.get_current_filters()
         active_filter_chips = self.get_active_filter_chips(current_filters)
+        view_mode = self.get_view_mode()
 
         context["companies"] = self.request.user.companies.all()
         context["status_choices"] = Application.STATUS_CHOICES
@@ -282,6 +286,19 @@ class ApplicationBaseView(LoginRequiredMixin, generic.View):
         context["active_filter_chips"] = active_filter_chips
         context["has_active_filters"] = bool(active_filter_chips)
         context["query_string"] = query_params.urlencode()
+        context["view_mode"] = view_mode
+        context["is_kanban"] = view_mode == "kanban"
+        context["page_kicker"] = "Application Board" if view_mode == "kanban" else "Application Workspace"
+        context["page_title"] = (
+            "See your pipeline by stage and move with more clarity."
+            if view_mode == "kanban"
+            else "Track every role with clear next-step context."
+        )
+        context["page_description"] = (
+            "Scan every status column at once, keep filters intact, and update roles without losing the bigger picture of your search."
+            if view_mode == "kanban"
+            else "Keep your applications, stages, salary ranges, and notes in one place so your job search stays focused instead of fragmented."
+        )
         return context
 
     def get_post_redirect(self):
