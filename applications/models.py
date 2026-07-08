@@ -83,10 +83,10 @@ class Application(models.Model):
     def save(self, *args, **kwargs):
         old_status = None
         old_notes = None
-
+        application = Application.objects.get(pk=self.pk)
         if self.pk:
-            old_status = Application.objects.get(pk=self.pk).status
-            old_notes = Application.objects.get(pk=self.pk).notes
+            old_status = application.status
+            old_notes = application.notes
         
         super().save(*args, **kwargs)
 
