@@ -5,7 +5,7 @@
 <main class="py-10 md:py-14">
     <div class="mx-auto max-w-4xl">
         <div class="mb-10">
-            <a href="{% url 'applications:application-list' %}" class="text-sm font-semibold text-blue-600 transition hover:text-blue-700">
+            <a href="{% url 'applications:application-view' %}" class="text-sm font-semibold text-blue-600 transition hover:text-blue-700">
                 Back to applications
             </a>
             <p class="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">Add Application</p>
@@ -160,7 +160,7 @@
                         Create application
                     </button>
                     <a
-                        href="{% url 'applications:application-list' %}"
+                        href="{% url 'applications:application-view' %}"
                         class="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
                     >
                         Cancel

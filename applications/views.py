@@ -3,17 +3,13 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
 from django.utils.dateparse import parse_date
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.contrib import messages
 from .models import Application, SavedFilter
 from .forms import ApplicationForm
 from .mixins import ApplicationCompanyMixin, ApplicationTagBuilderMixin
 
-class ApplicationListView(LoginRequiredMixin, generic.ListView):
-    model = Application
-    context_object_name = "applications"
-    template_name = "applications/application_list.html"
-    paginate_by = 20
+class ApplicationBaseView(LoginRequiredMixin, generic.View):
     SORT_OPTIONS = [
         ("newest", "Newest created"),
         ("oldest", "Oldest created"),
@@ -270,15 +266,10 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        paginator = context.get("paginator")
-        page_obj = context.get("page_obj")
         query_params = self.request.GET.copy()
         query_params.pop("page", None)
         current_filters = self.get_current_filters()
         active_filter_chips = self.get_active_filter_chips(current_filters)
-
-        if paginator and page_obj:
-            context["page_range"] = paginator.get_elided_page_range(page_obj.number)
 
         context["companies"] = self.request.user.companies.all()
         context["status_choices"] = Application.STATUS_CHOICES
@@ -292,7 +283,10 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
         context["has_active_filters"] = bool(active_filter_chips)
         context["query_string"] = query_params.urlencode()
         return context
-    
+
+    def get_post_redirect(self):
+        return redirect(self.request.get_full_path())
+
     def post(self, request, *args, **kwargs):
         if request.POST.get("action") == "save_filter":
             name = " ".join(request.POST.get("name", "").split())
@@ -313,7 +307,7 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
                     },
                 )
                 messages.success(request, "Filter saved.")
-            return redirect(request.get_full_path())
+            return self.get_post_redirect()
 
         if request.POST.get("action") == "delete_filter":
             filter_name = request.POST.get("filter_name", "").strip()
@@ -324,7 +318,7 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
             else:
                 messages.error(request, "Saved filter not found.")
 
-            return redirect("applications:application-list")
+            return self.get_post_redirect()
 
         if request.POST.get("action") == "update_status":
             application_id = request.POST.get("application_id", "").strip()
@@ -344,14 +338,61 @@ class ApplicationListView(LoginRequiredMixin, generic.ListView):
                 application.save()
                 messages.success(request, "Status updated.")
             
-        return redirect("applications:application-list")
+        return self.get_post_redirect()
+
+
+class ApplicationIndexView(generic.View):
+    def dispatch(self, request, *args, **kwargs):
+        if request.GET.get("view") == "kanban":
+            return ApplicationKanbanView.as_view()(request, *args, **kwargs)
+
+        return ApplicationListView.as_view()(request, *args, **kwargs)
+
+
+class ApplicationListView(ApplicationBaseView, generic.ListView):
+    model = Application
+    context_object_name = "applications"
+    template_name = "applications/application_list.html"
+    paginate_by = 20
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        paginator = context.get("paginator")
+        page_obj = context.get("page_obj")
+
+        if paginator and page_obj:
+            context["page_range"] = paginator.get_elided_page_range(page_obj.number)
+
+        return context
+    
+
+class ApplicationKanbanView(ApplicationBaseView, generic.ListView):
+    model = Application
+    context_object_name = "applications"
+    template_name = "applications/application_kanban.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        applications = context["applications"]
+
+        context["kanban_columns"] = [
+            {
+                "value": value,
+                "label": label,
+                "applications": applications.filter(status=value),
+            }
+            for value, label in Application.STATUS_CHOICES
+        ]
+
+        return context
 
 
 class ApplicationCreateView(ApplicationCompanyMixin, ApplicationTagBuilderMixin, LoginRequiredMixin, generic.CreateView):
     model = Application
     form_class = ApplicationForm
     template_name = "applications/application_create.html"
-    success_url = reverse_lazy("applications:application-list")
+    success_url = reverse_lazy("applications:application-view")
 
     def get_form(self, form_class=None):
         form_class = self.get_form_class() if form_class is None else form_class
@@ -362,26 +403,24 @@ class ApplicationCreateView(ApplicationCompanyMixin, ApplicationTagBuilderMixin,
         return form
 
     def form_valid(self, form):
+        company = self.resolve_company(form)
+        title = form.cleaned_data["title"]
+        duplicate = Application.objects.filter(
+            owner=self.request.user,
+            company=company,
+            title__iexact=title,
+        ).exists()
+
         form.instance.owner = self.request.user
-        form.instance.company = self.resolve_company(form)
+        form.instance.company = company
         response = super().form_valid(form)
         self.attach_new_tags(self.object)
 
-        if form.is_bound and form.is_valid():
-            company = self.resolve_company(form)
-            title = form.cleaned_data["title"]
-
-            duplicate = Application.objects.filter(
-                owner=self.request.user,
-                company=company,
-                title__iexact=title,
-            ).exists()
-            print(duplicate)
-            if duplicate:
-                messages.warning(
-                    self.request,
-                    "You already have another application for this role at this company."
-                )
+        if duplicate:
+            messages.warning(
+                self.request,
+                "You already have another application for this role at this company."
+            )
 
         return response
 
@@ -445,7 +484,7 @@ class ApplicationDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Application
     context_object_name = "application"
     template_name = "applications/application_delete.html"
-    success_url = reverse_lazy("applications:application-list")
+    success_url = reverse_lazy("applications:application-view")
     
     def get_queryset(self):
         return self.request.user.applications.select_related("company").prefetch_related("tags")

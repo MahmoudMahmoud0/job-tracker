@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    ApplicationListView,
+    ApplicationIndexView,
     ApplicationCreateView,
     ApplicationDeleteView,
     ApplicationUpdateView,
@@ -10,7 +10,7 @@ from .views import (
 app_name = "applications"
 
 urlpatterns = [
-    path("", ApplicationListView.as_view(), name="application-list"),
+    path("", ApplicationIndexView.as_view(), name="application-view"),
     path("create/", ApplicationCreateView.as_view(), name="application-create"),
     path("delete/<int:pk>/", ApplicationDeleteView.as_view(), name="application-delete"),
     path("detail/<int:pk>/", ApplicationDetailView.as_view(), name="application-detail"),
