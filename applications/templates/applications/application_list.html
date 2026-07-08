@@ -19,6 +19,16 @@
             </a>
         </div>
 
+        {% if messages %}
+            <div class="mt-6 space-y-3">
+                {% for message in messages %}
+                    <div class="rounded-[1.25rem] border px-4 py-3 text-sm font-medium shadow-sm {% if message.tags == 'success' %}border-emerald-200 bg-emerald-50 text-emerald-800{% elif message.tags == 'error' %}border-rose-200 bg-rose-50 text-rose-800{% elif message.tags == 'warning' %}border-amber-200 bg-amber-50 text-amber-800{% else %}border-blue-200 bg-blue-50 text-blue-800{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <div class="mt-8 rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-5 shadow-sm">
             <form method="get" class="flex flex-col gap-4 xl:flex-row xl:items-center">
                 <input type="hidden" name="company" value="{{ current_filters.company }}">

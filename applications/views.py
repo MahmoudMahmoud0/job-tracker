@@ -366,6 +366,23 @@ class ApplicationCreateView(ApplicationCompanyMixin, ApplicationTagBuilderMixin,
         form.instance.company = self.resolve_company(form)
         response = super().form_valid(form)
         self.attach_new_tags(self.object)
+
+        if form.is_bound and form.is_valid():
+            company = self.resolve_company(form)
+            title = form.cleaned_data["title"]
+
+            duplicate = Application.objects.filter(
+                owner=self.request.user,
+                company=company,
+                title__iexact=title,
+            ).exists()
+            print(duplicate)
+            if duplicate:
+                messages.warning(
+                    self.request,
+                    "You already have another application for this role at this company."
+                )
+
         return response
 
     def get_context_data(self, **kwargs):
