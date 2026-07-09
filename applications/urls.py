@@ -8,6 +8,7 @@ from .views import (
     FollowUpCreateView,
     FollowUpUpdateView,
     FollowUpDeleteView,
+    FollowupListView,
 )
 
 app_name = "applications"
@@ -21,4 +22,5 @@ urlpatterns = [
     path("create/<int:pk>/followups/create", FollowUpCreateView.as_view(), name="followup-create"),
     path("detail/<int:pk>/followups/update/", FollowUpUpdateView.as_view(), name="followup-update"),
     path("detail/<int:pk>/followups/delete/", FollowUpDeleteView.as_view(), name="followup-delete"),
+    path("followups/", FollowupListView.as_view(), name="followup-list"),
 ]

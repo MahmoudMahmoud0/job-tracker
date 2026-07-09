@@ -371,7 +371,7 @@ class ApplicationBaseView(LoginRequiredMixin, generic.View):
         ):
             return next_url
 
-        return reverse_lazy("applications:application-view")
+        return None
     
 class ApplicationIndexView(generic.View):
     def dispatch(self, request, *args, **kwargs):
@@ -584,7 +584,7 @@ class FollowUpCreateView(ApplicationBaseView, generic.CreateView):
         context["cancel_url"] = self.get_return_url()
         return context
 
-class FollowUpUpdateView(LoginRequiredMixin, generic.UpdateView):
+class FollowUpUpdateView(ApplicationBaseView, generic.UpdateView):
     model = FollowUp
     form_class = FollowUpForm
     template_name = "followups/followup_update.html"
@@ -598,10 +598,10 @@ class FollowUpUpdateView(LoginRequiredMixin, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["application"] = self.object.application
-        context["cancel_url"] = reverse_lazy("applications:application-detail", kwargs={"pk": self.object.application.pk})
+        context["cancel_url"] = self.get_return_url()
         return context
 
-class FollowUpDeleteView(LoginRequiredMixin, generic.DeleteView):
+class FollowUpDeleteView(ApplicationBaseView, generic.DeleteView):
     model = FollowUp
     context_object_name = "follow_up"
     template_name = "followups/followup_delete.html"
@@ -619,5 +619,56 @@ class FollowUpDeleteView(LoginRequiredMixin, generic.DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["application"] = self.object.application
-        context["cancel_url"] = reverse_lazy("applications:application-detail", kwargs={"pk": self.object.application.pk})
+        context["cancel_url"] = self.get_return_url()
+        return context
+
+class FollowupListView(ApplicationBaseView, generic.ListView):
+    model = Application
+    template_name = "followups/followup_list.html"
+    context_object_name = "applications"
+    paginate_by = 5
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get("action") == "switch_followup_status":
+            follow_up_id = request.POST.get("follow_up_id", "").strip()
+            follow_up = (
+                FollowUp.objects
+                .filter(pk=follow_up_id, application__owner=request.user)
+                .select_related("application")
+                .first()
+            )
+
+            if not follow_up:
+                messages.error(request, "Follow-up not found.")
+                return redirect(request.get_full_path())
+
+            follow_up.completed = not follow_up.completed
+            follow_up.completed_at = timezone.now() if follow_up.completed else None
+            follow_up.save(update_fields=["completed", "completed_at", "updated_at"])
+
+            if follow_up.completed:
+                messages.success(request, "Follow-up marked as completed.")
+            else:
+                messages.success(request, "Follow-up marked as pending.")
+
+            return redirect(request.get_full_path())
+
+        return redirect(request.get_full_path())
+
+    def get_queryset(self):
+        return (
+            self.request.user.applications
+            .select_related("company")
+            .prefetch_related("follow_ups", "tags")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        paginator = context.get("paginator")
+        page_obj = context.get("page_obj")
+
+        if paginator and page_obj:
+            context["page_range"] = paginator.get_elided_page_range(page_obj.number)
+
+        context["cancel_url"] = self.get_return_url()
         return context

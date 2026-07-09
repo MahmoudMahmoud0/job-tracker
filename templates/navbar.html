@@ -77,14 +77,14 @@
                   </li>
 
                   <li>
-                     <a href="{% url 'landing' %}#interviews" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
+                     <a href="{% url 'interviews:interview-create' %}" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
                focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
                         {% trans "Schedule Interview" %}
                      </a>
                   </li>
 
                   <li>
-                     <a href="{% url 'landing' %}#workflow" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
+                     <a href="{% url 'applications:followup-list' %}" class="text-nowrap hover:text-blue-700 dark:hover:text-blue-400
                focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
                         {% trans "Follow-up Notes" %}
                      </a>
