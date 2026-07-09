@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="py-10 md:py-14">
+    <section class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+            <div class="max-w-3xl">
+                <a href="{% url 'interviews:interview-list' %}" class="text-sm font-semibold text-blue-600 transition hover:text-blue-700">
+                    Back to interviews
+                </a>
+                <p class="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">Interview Profile</p>
+                <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">{{ interview.round_name }}</h1>
+                <p class="mt-3 text-base font-medium text-slate-600">{{ interview.application.title }} at {{ interview.application.company.name }}</p>
+                <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+                    Review the timing, meeting details, and notes before the interview or when you need a clean history of what happened.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <a
+                    href="{% url 'interviews:interview-update' interview.pk %}"
+                    class="inline-flex items-center rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                >
+                    Edit interview
+                </a>
+                <a
+                    href="{% url 'interviews:interview-delete' interview.pk %}"
+                    class="inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-5 py-3 text-sm font-semibold text-rose-700 transition hover:border-rose-300 hover:bg-rose-100"
+                >
+                    Delete
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-8 grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
+            <div class="rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-6 shadow-sm">
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">At a glance</p>
+                <dl class="mt-5 space-y-5">
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Interview Type</dt>
+                        <dd class="mt-2 text-sm text-slate-700">{{ interview.get_interview_type_display }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Outcome</dt>
+                        <dd class="mt-2 text-sm text-slate-700">{{ interview.get_outcome_display }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Scheduled</dt>
+                        <dd class="mt-2 text-sm text-slate-700">
+                            {% if interview.scheduled_at %}{{ interview.scheduled_at|date:"M j, Y \\a\\t g:i A" }}{% else %}<span class="text-slate-400">Not scheduled yet</span>{% endif %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Duration</dt>
+                        <dd class="mt-2 text-sm text-slate-700">
+                            {% if interview.duration_minutes %}{{ interview.duration_minutes }} minutes{% else %}<span class="text-slate-400">Not added</span>{% endif %}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Application</dt>
+                        <dd class="mt-2 text-sm text-slate-700">
+                            <a href="{% url 'applications:application-detail' interview.application.pk %}" class="font-medium text-blue-600 transition hover:text-blue-700">
+                                {{ interview.application.title }}
+                            </a>
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-sm">
+                <div class="flex flex-wrap gap-3">
+                    <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">
+                        {{ interview.application.company.name }}
+                    </span>
+                    <span class="rounded-full bg-cyan-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">
+                        {{ interview.get_interview_type_display }}
+                    </span>
+                    <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                        {{ interview.get_outcome_display }}
+                    </span>
+                </div>
+
+                <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                    <div class="rounded-[1.25rem] bg-slate-50/80 p-5">
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Location</p>
+                        <p class="mt-3 text-sm leading-7 text-slate-700">
+                            {% if interview.location %}{{ interview.location }}{% else %}Not added yet{% endif %}
+                        </p>
+                    </div>
+                    <div class="rounded-[1.25rem] bg-slate-50/80 p-5">
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Meeting Link</p>
+                        <p class="mt-3 text-sm leading-7 text-slate-700">
+                            {% if interview.meeting_url %}
+                                <a href="{{ interview.meeting_url }}" class="break-all font-medium text-blue-600 transition hover:text-blue-700">
+                                    Open meeting link
+                                </a>
+                            {% else %}
+                                Not added yet
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Notes</p>
+                    <div class="mt-3 rounded-[1.25rem] bg-slate-50/80 p-5">
+                        <p class="whitespace-pre-line text-sm leading-7 text-slate-700">
+                            {% if interview.notes %}
+                                {{ interview.notes }}
+                            {% else %}
+                                No notes yet. Add the agenda, preparation points, or post-interview takeaways here.
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock content %}

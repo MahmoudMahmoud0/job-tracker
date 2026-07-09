@@ -15,6 +15,9 @@ class InterviewForm(forms.ModelForm):
             "notes",
             "outcome",
         ]
+        widgets = {
+            "scheduled_at": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+        }
 
     def __init__(self, *args, user=None, **kwargs):
         # views should give users to kwargs, this is used to llimit the choices that appear in the form dropdown of a ModelChoiceField for the user based on his own applications (not control views as in queryset - queryset in a view just prevents the user from editing someone else's follow up)
