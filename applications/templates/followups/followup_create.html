@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load tailwind_filters %}
+
+{% block content %}
+<main class="py-10 md:py-14">
+    <div class="mx-auto max-w-3xl">
+        <div class="mb-10">
+            <a href="{{ cancel_url }}" class="text-sm font-semibold text-blue-600 transition hover:text-blue-700">
+                Back to application
+            </a>
+            <p class="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">Add Follow-Up</p>
+            <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">Create a follow-up for {{ application.title }}.</h1>
+            <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+                Capture the next action, due date, and any context you want to see when you come back to this application.
+            </p>
+        </div>
+
+        <section class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+            <div class="mb-6 rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-5">
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Application</p>
+                <h2 class="mt-2 text-xl font-semibold text-slate-900">{{ application.title }}</h2>
+                <p class="mt-1 text-sm text-slate-600">{{ application.company.name }}</p>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ cancel_url }}">
+                {% if form.non_field_errors %}
+                    <div class="mb-6 rounded-[1.25rem] border border-rose-200 bg-rose-50/80 p-4 text-sm text-rose-700">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {{ form.title|as_crispy_field }}
+                {{ form.due_at|as_crispy_field }}
+                {{ form.notes|as_crispy_field }}
+
+                <div class="mt-8 flex flex-wrap items-center gap-3">
+                    <button
+                        type="submit"
+                        class="inline-flex items-center rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                    >
+                        Save follow-up
+                    </button>
+                    <a
+                        href="{{ cancel_url }}"
+                        class="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+{% endblock content %}

@@ -3,10 +3,12 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
 from django.utils.dateparse import parse_date
-from django.shortcuts import redirect
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils import timezone
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
-from .models import Application, SavedFilter
-from .forms import ApplicationForm
+from .models import Application, SavedFilter, FollowUp
+from .forms import ApplicationForm, FollowUpForm
 from .mixins import ApplicationCompanyMixin, ApplicationTagBuilderMixin
 
 class ApplicationBaseView(LoginRequiredMixin, generic.View):
@@ -466,8 +468,31 @@ class ApplicationDetailView(LoginRequiredMixin, generic.DetailView):
         return (
             self.request.user.applications
             .select_related("company")
-            .prefetch_related("tags", "status_history")
+            .prefetch_related("tags", "status_history", "follow_ups")
         )
+    
+    def post(self, request, *args, **kwargs):
+        if request.POST.get("action") == "switch_followup_status":
+            application = self.get_object()
+            follow_up_id = request.POST.get("follow_up_id", "").strip()
+            follow_up = application.follow_ups.filter(pk=follow_up_id).first()
+
+            if not follow_up:
+                messages.error(request, "Follow-up not found.")
+                return redirect("applications:application-detail", pk=application.pk)
+
+            follow_up.completed = not follow_up.completed
+            follow_up.completed_at = timezone.now() if follow_up.completed else None
+            follow_up.save(update_fields=["completed", "completed_at", "updated_at"])
+
+            if follow_up.completed:
+                messages.success(request, "Follow-up marked as completed.")
+            else:
+                messages.success(request, "Follow-up marked as pending.")
+
+            return redirect("applications:application-detail", pk=application.pk)
+
+        return redirect("applications:application-detail", pk=self.get_object().pk)
 
 class ApplicationUpdateView(ApplicationCompanyMixin, ApplicationTagBuilderMixin, LoginRequiredMixin, generic.UpdateView):
     model = Application
@@ -512,3 +537,82 @@ class ApplicationDeleteView(LoginRequiredMixin, generic.DeleteView):
     
     def get_queryset(self):
         return self.request.user.applications.select_related("company").prefetch_related("tags")
+
+class FollowUpCreateView(LoginRequiredMixin, generic.CreateView):
+    model = FollowUp
+    template_name = "followups/followup_create.html"
+    form_class = FollowUpForm
+
+    def get_application(self):
+        return get_object_or_404(
+            Application,
+            pk=self.kwargs["pk"],
+            owner=self.request.user,
+        )
+
+    def form_valid(self, form):
+        application = self.get_application()
+        form.instance.application = application
+        messages.success(self.request, "Follow-up added.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.get_return_url()
+
+    def get_return_url(self):
+        next_url = self.request.GET.get("next", "").strip()
+        if self.request.method == "POST":
+            next_url = self.request.POST.get("next", "").strip()
+
+        if next_url and url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        ):
+            return next_url
+
+        return reverse_lazy("applications:application-view")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["application"] = self.get_application()
+        context["cancel_url"] = self.get_return_url()
+        return context
+
+class FollowUpUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = FollowUp
+    form_class = FollowUpForm
+    template_name = "followups/followup_update.html"
+
+    def get_success_url(self):
+        return reverse_lazy("applications:application-detail", kwargs={"pk": self.object.application.pk})
+    
+    def get_queryset(self):
+        return FollowUp.objects.filter(application__owner=self.request.user).select_related("application", "application__company")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["application"] = self.object.application
+        context["cancel_url"] = reverse_lazy("applications:application-detail", kwargs={"pk": self.object.application.pk})
+        return context
+
+class FollowUpDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = FollowUp
+    context_object_name = "follow_up"
+    template_name = "followups/followup_delete.html"
+
+    def get_success_url(self):
+        return reverse_lazy("applications:application-detail", kwargs={"pk": self.object.application.pk})
+        
+    def get_queryset(self):
+        return FollowUp.objects.filter(application__owner=self.request.user).select_related("application", "application__company")
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Follow-up deleted.")
+        return super().delete(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["application"] = self.object.application
+        context["cancel_url"] = reverse_lazy("applications:application-detail", kwargs={"pk": self.object.application.pk})
+        return context

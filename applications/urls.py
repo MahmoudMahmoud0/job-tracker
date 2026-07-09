@@ -4,7 +4,10 @@ from .views import (
     ApplicationCreateView,
     ApplicationDeleteView,
     ApplicationUpdateView,
-    ApplicationDetailView
+    ApplicationDetailView,
+    FollowUpCreateView,
+    FollowUpUpdateView,
+    FollowUpDeleteView,
 )
 
 app_name = "applications"
@@ -15,4 +18,7 @@ urlpatterns = [
     path("delete/<int:pk>/", ApplicationDeleteView.as_view(), name="application-delete"),
     path("detail/<int:pk>/", ApplicationDetailView.as_view(), name="application-detail"),
     path("update/<int:pk>/", ApplicationUpdateView.as_view(), name="application-update"),
+    path("create/<int:pk>/followups/", FollowUpCreateView.as_view(), name="followup-create"),
+    path("detail/<int:pk>/followups/update/", FollowUpUpdateView.as_view(), name="followup-update"),
+    path("detail/<int:pk>/followups/delete/", FollowUpDeleteView.as_view(), name="followup-delete"),
 ]

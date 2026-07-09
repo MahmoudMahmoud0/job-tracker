@@ -151,3 +151,25 @@ class SavedFilter(models.Model):
 
     def __str__(self):
         return self.name
+    
+class FollowUp(models.Model):
+    application = models.ForeignKey(
+        Application,
+        on_delete=models.CASCADE,
+        related_name="follow_ups"
+    )
+
+    title = models.CharField(max_length=255)
+    due_at = models.DateTimeField(blank=True, null=True)
+    completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(blank=True, null=True)
+    notes = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["due_at", "completed", "-created_at"]
+
+    def __str__(self):
+        return self.title

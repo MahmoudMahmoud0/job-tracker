@@ -1,5 +1,5 @@
 from django import forms
-from .models import Application
+from .models import Application, FollowUp
 
 class ApplicationForm(forms.ModelForm):
     quick_company_name = forms.CharField(
@@ -72,3 +72,15 @@ class ApplicationForm(forms.ModelForm):
             )
 
         return cleaned_data
+    
+class FollowUpForm(forms.ModelForm):
+    class Meta:
+        model = FollowUp
+        fields = [
+            "title",
+            "due_at",
+            "notes"
+        ]
+        widgets = {
+            "due_at": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+        }

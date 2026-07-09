@@ -126,6 +126,12 @@
                                 </form>
                             </div>
                         </details>
+                        <a
+                            href="{% url 'applications:followup-create' application.pk %}?next={{ request.get_full_path|urlencode }}"
+                            class="inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
+                        >
+                            Add Follow-Up
+                        </a>
                     </div>
                 </article>
             {% endfor %}
