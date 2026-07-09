@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'accounts',
     'companies',
     'applications',
+    'interviews',
 
     # Third Party Apps
     "rest_framework",

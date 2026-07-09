@@ -96,13 +96,13 @@
                                                 View
                                             </a>
                                             <a
-                                                href="{% url 'applications:application-update' application.pk %}"
+                                                href="{% url 'applications:application-update' application.pk %}?next={{ request.get_full_path|urlencode }}"
                                                 class="inline-flex items-center rounded-full bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
                                             >
                                                 Edit
                                             </a>
                                             <a
-                                                href="{% url 'applications:application-delete' application.pk %}"
+                                                href="{% url 'applications:application-delete' application.pk %}?next={{ request.get_full_path|urlencode }}"
                                                 class="inline-flex items-center rounded-full border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 transition hover:border-rose-300 hover:bg-rose-100"
                                             >
                                                 Delete

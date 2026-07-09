@@ -357,9 +357,22 @@ class ApplicationBaseView(LoginRequiredMixin, generic.View):
                 application.save()
                 messages.success(request, "Status updated.")
             
-        return self.get_post_redirect()
+        return super().post(request, *args, **kwargs)
 
+    def get_return_url(self):
+        next_url = self.request.GET.get("next", "").strip()
+        if self.request.method == "POST":
+            next_url = self.request.POST.get("next", "").strip()
 
+        if next_url and url_has_allowed_host_and_scheme(
+            url=next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        ):
+            return next_url
+
+        return reverse_lazy("applications:application-view")
+    
 class ApplicationIndexView(generic.View):
     def dispatch(self, request, *args, **kwargs):
         if request.GET.get("view") == "kanban":
@@ -494,7 +507,7 @@ class ApplicationDetailView(LoginRequiredMixin, generic.DetailView):
 
         return redirect("applications:application-detail", pk=self.get_object().pk)
 
-class ApplicationUpdateView(ApplicationCompanyMixin, ApplicationTagBuilderMixin, LoginRequiredMixin, generic.UpdateView):
+class ApplicationUpdateView(ApplicationCompanyMixin, ApplicationTagBuilderMixin, ApplicationBaseView, generic.UpdateView):
     model = Application
     form_class = ApplicationForm
     context_object_name = "application"
@@ -527,9 +540,10 @@ class ApplicationUpdateView(ApplicationCompanyMixin, ApplicationTagBuilderMixin,
         context["existing_tag_picker"] = self.get_existing_tag_picker_context(form)
         context["show_quick_company"] = self.should_show_quick_company(form)
         context["show_new_tags"] = self.should_show_new_tags(new_tag_rows)
+        context["cancel_url"] = self.get_return_url()
         return context
 
-class ApplicationDeleteView(LoginRequiredMixin, generic.DeleteView):
+class ApplicationDeleteView(ApplicationBaseView, generic.DeleteView):
     model = Application
     context_object_name = "application"
     template_name = "applications/application_delete.html"
@@ -538,7 +552,12 @@ class ApplicationDeleteView(LoginRequiredMixin, generic.DeleteView):
     def get_queryset(self):
         return self.request.user.applications.select_related("company").prefetch_related("tags")
 
-class FollowUpCreateView(LoginRequiredMixin, generic.CreateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cancel_url'] = self.get_return_url()
+        return context
+
+class FollowUpCreateView(ApplicationBaseView, generic.CreateView):
     model = FollowUp
     template_name = "followups/followup_create.html"
     form_class = FollowUpForm
@@ -558,20 +577,6 @@ class FollowUpCreateView(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         return self.get_return_url()
-
-    def get_return_url(self):
-        next_url = self.request.GET.get("next", "").strip()
-        if self.request.method == "POST":
-            next_url = self.request.POST.get("next", "").strip()
-
-        if next_url and url_has_allowed_host_and_scheme(
-            url=next_url,
-            allowed_hosts={self.request.get_host()},
-            require_https=self.request.is_secure(),
-        ):
-            return next_url
-
-        return reverse_lazy("applications:application-view")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

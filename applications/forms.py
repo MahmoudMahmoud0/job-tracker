@@ -40,6 +40,7 @@ class ApplicationForm(forms.ModelForm):
             self.fields["tags"].help_text = "Attach existing tags here. You can also add brand-new tags right below."
 
         if "company" in self.fields:
+            self.fields["company"].queryset = self.owner.companies.all()
             self.fields["company"].required = False
             self.fields["company"].help_text = "Pick an existing company, or use the quick add field right below."
 
