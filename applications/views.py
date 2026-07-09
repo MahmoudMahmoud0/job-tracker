@@ -430,6 +430,13 @@ class ApplicationCreateView(ApplicationCompanyMixin, ApplicationTagBuilderMixin,
 
         form.instance.owner = self.request.user
         form.instance.company = company
+
+        status = form.cleaned_data.get("status")
+        applied_date = form.cleaned_data.get("applied_at")
+
+        if applied_date and status == "wishlist":
+            form.instance.status = "applied"
+
         response = super().form_valid(form)
         self.attach_new_tags(self.object)
 
