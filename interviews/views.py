@@ -41,6 +41,13 @@ class InterviewCreateView(LoginRequiredMixin, InterviewNavigationMixin, generic.
         context["cancel_url"] = self.get_return_url(reverse_lazy("interviews:interview-list"))
         return context
 
+    def form_valid(self, form):
+        application = form.cleaned_data["application"]
+        if application.status != "interviewing":
+            application.status = "interviewing"
+            application.save()
+        return super().form_valid(form)
+
 
 class InterviewDetailView(LoginRequiredMixin, InterviewQuerysetMixin, generic.DetailView):
     model = Interview
