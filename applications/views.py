@@ -356,8 +356,16 @@ class ApplicationBaseView(LoginRequiredMixin, generic.View):
                 application.status = status
                 application.save()
                 messages.success(request, "Status updated.")
-            
-        return super().post(request, *args, **kwargs)
+            else:
+                messages.success(request, "Status already set.")
+
+            return redirect(request.get_full_path())
+
+        parent_post = getattr(super(), "post", None)
+        if callable(parent_post):
+            return parent_post(request, *args, **kwargs)
+
+        return redirect(request.get_full_path())
 
     def get_return_url(self):
         next_url = self.request.GET.get("next", "").strip()

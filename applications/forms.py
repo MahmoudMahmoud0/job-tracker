@@ -28,6 +28,9 @@ class ApplicationForm(forms.ModelForm):
             "tags",
             "archived"
         ]
+        widgets = {
+            "applied_at": forms.DateInput(attrs={"type": "date"}),
+        }
 
     def __init__(self, *args, **kwargs):
         self.owner = kwargs.pop("owner", None)

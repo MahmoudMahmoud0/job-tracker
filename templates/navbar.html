@@ -3,7 +3,7 @@
    class="flex py-2 px-4 md:px-8 bg-white border-b border-slate-300 dark:border-neutral-700 dark:bg-neutral-900 min-h-[68px] relative z-20"
    aria-label="Main navigation">
    <div class="max-w-7xl mx-auto flex items-center gap-4 w-full">
-      <a href="{% url 'landing' %}"
+      <a href="{% if request.user.is_authenticated %} {% url 'reports:dashboard' %} {% else %} {% url 'landing' %} {% endif %}"
          class="min-w-9 inline-flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded">
          <span class="sr-only">{% trans "Job Tracker" %} - Mahmoud Mahmoud</span>
          <img src="{% static 'images/logo.png' %}" alt="{% trans 'Job Tracker logo' %}" class="h-14 w-auto" />

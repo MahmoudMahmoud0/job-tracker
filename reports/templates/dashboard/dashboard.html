@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="py-10 md:py-14">
+    <section class="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl md:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div class="max-w-3xl">
+                <p class="text-xs font-semibold uppercase tracking-[0.22em] text-blue-700">{{ page_kicker }}</p>
+                <h1 class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">{{ page_title }}</h1>
+                <p class="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">{{ page_description }}</p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <a
+                    href="{% url 'applications:application-create' %}"
+                    class="inline-flex items-center rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                >
+                    Add application
+                </a>
+                <a
+                    href="{% url 'interviews:interview-create' %}"
+                    class="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
+                >
+                    Schedule interview
+                </a>
+            </div>
+        </div>
+
+        {% if has_dashboard_data %}
+            <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <article class="rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-5 shadow-sm">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Total Applications</p>
+                    <p class="mt-4 text-3xl font-semibold tracking-tight text-slate-900">{{ summary.total_applications }}</p>
+                    <p class="mt-2 text-sm text-slate-600">{{ summary.active_applications }} active roles still in motion.</p>
+                </article>
+                <article class="rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-5 shadow-sm">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Upcoming Interviews</p>
+                    <p class="mt-4 text-3xl font-semibold tracking-tight text-slate-900">{{ summary.upcoming_interviews_count }}</p>
+                    <p class="mt-2 text-sm text-slate-600">Scheduled within the next 7 days.</p>
+                </article>
+                <article class="rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-5 shadow-sm">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Overdue Follow-Ups</p>
+                    <p class="mt-4 text-3xl font-semibold tracking-tight text-slate-900">{{ summary.overdue_followups_count }}</p>
+                    <p class="mt-2 text-sm text-slate-600">Roles that need outreach or a next step.</p>
+                </article>
+                <article class="rounded-[1.5rem] border border-slate-200/80 bg-slate-50/80 p-5 shadow-sm">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Conversion Snapshot</p>
+                    <p class="mt-4 text-3xl font-semibold tracking-tight text-slate-900">{{ summary.interview_rate }}%</p>
+                    <p class="mt-2 text-sm text-slate-600">Interview-stage rate from submitted roles. Offer rate: {{ summary.offer_rate }}%.</p>
+                </article>
+            </div>
+
+            <div class="mt-8 grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
+                <section class="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-sm">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Pipeline Overview</p>
+                            <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-900">Where your search stands today</h2>
+                        </div>
+                        <a href="{% url 'applications:application-view' %}?view=kanban" class="text-sm font-semibold text-blue-600 transition hover:text-blue-700">Open pipeline</a>
+                    </div>
+
+                    <div class="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                        {% for item in pipeline_overview %}
+                            <article class="rounded-[1.25rem] bg-slate-50/80 p-4">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{{ item.label }}</p>
+                                        <p class="mt-3 text-2xl font-semibold tracking-tight text-slate-900">{{ item.count }}</p>
+                                    </div>
+                                    <span class="rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600">
+                                        {{ item.percentage }}%
+                                    </span>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <section class="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-sm">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Top Opportunity Sources</p>
+                    <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-900">What is producing the best volume</h2>
+
+                    <div class="mt-6 space-y-4">
+                        {% for source in opportunity_sources %}
+                            <article>
+                                <div class="flex items-center justify-between gap-3">
+                                    <p class="text-sm font-semibold text-slate-800">{{ source.label }}</p>
+                                    <p class="text-sm text-slate-500">{{ source.count }} role{{ source.count|pluralize }}</p>
+                                </div>
+                                <div class="mt-2 h-2 rounded-full bg-slate-100">
+                                    <div
+                                        class="h-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400"
+                                        data-width="{{ source.percentage }}"
+                                    ></div>
+                                </div>
+                            </article>
+                        {% empty %}
+                            <p class="text-sm leading-7 text-slate-600">Add source details to applications so the dashboard can show which channels deserve more of your time.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+
+            <div class="mt-8">
+                <section class="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-sm">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Weekly Application Trend</p>
+                            <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-900">Last 8 weeks of application momentum</h2>
+                        </div>
+                        <span class="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">Weekly</span>
+                    </div>
+
+                    <div class="mt-8 grid grid-cols-4 gap-4 md:grid-cols-8">
+                        {% for week in weekly_trends %}
+                            <div class="flex min-h-44 flex-col justify-end">
+                                <div class="flex flex-1 items-end">
+                                    <div
+                                        class="w-full rounded-t-2xl bg-gradient-to-t from-blue-600 to-cyan-400"
+                                        data-height="{{ week.bar_height }}"
+                                    ></div>
+                                </div>
+                                <p class="mt-3 text-center text-sm font-semibold text-slate-800">{{ week.count }}</p>
+                                <p class="mt-1 text-center text-xs uppercase tracking-[0.16em] text-slate-500">{{ week.label }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+
+            <div class="mt-8 grid gap-5 xl:grid-cols-2">
+                <section class="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-sm xl:col-span-2">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Recent Activity</p>
+                    <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-900">The latest changes across your search</h2>
+
+                    <div class="mt-6 grid gap-3 xl:grid-cols-2">
+                        {% for activity in recent_activity %}
+                            <a href="{{ activity.url }}" class="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-4 transition hover:border-slate-300 hover:bg-white">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <span class="rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-600">{{ activity.tag }}</span>
+                                        <h3 class="mt-3 text-sm font-semibold text-slate-900">{{ activity.title }}</h3>
+                                        <p class="mt-1 text-sm leading-6 text-slate-600">{{ activity.description }}</p>
+                                    </div>
+                                    <p class="shrink-0 text-xs text-slate-500">{{ activity.timestamp|date:"M j, g:i A" }}</p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="text-sm leading-7 text-slate-600 xl:col-span-2">Activity will appear here as you add roles, schedule interviews, and update statuses.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+
+            <div class="mt-8 grid gap-5 xl:grid-cols-2">
+                <section class="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-sm">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Upcoming Interviews</p>
+                            <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-900">What is coming up this week</h2>
+                        </div>
+                        <a href="{% url 'interviews:interview-list' %}" class="text-sm font-semibold text-blue-600 transition hover:text-blue-700">View all</a>
+                    </div>
+
+                    <div class="mt-6 space-y-3">
+                        {% for interview in upcoming_interviews %}
+                            <a href="{% url 'interviews:interview-detail' interview.pk %}" class="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-4 transition hover:border-slate-300 hover:bg-white">
+                                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                    <div>
+                                        <h3 class="text-sm font-semibold text-slate-900">{{ interview.application.title }}</h3>
+                                        <p class="mt-1 text-sm text-slate-600">{{ interview.application.company.name }}</p>
+                                        <p class="mt-2 text-xs font-semibold uppercase tracking-[0.16em] text-blue-700">{{ interview.round_name }}{% if interview.interview_type %} • {{ interview.get_interview_type_display }}{% endif %}</p>
+                                    </div>
+                                    <p class="text-sm font-medium text-slate-600">{{ interview.scheduled_at|date:"M j, Y \\a\\t g:i A" }}</p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="text-sm leading-7 text-slate-600">No upcoming interviews in the next 7 days. When you schedule one, it will appear here.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <section class="rounded-[1.5rem] border border-slate-200/80 bg-white p-6 shadow-sm">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Overdue Follow-Ups</p>
+                            <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-900">The roles that need a nudge</h2>
+                        </div>
+                        <a href="{% url 'applications:application-view' %}" class="text-sm font-semibold text-blue-600 transition hover:text-blue-700">Open applications</a>
+                    </div>
+
+                    <div class="mt-6 space-y-3">
+                        {% for followup in overdue_followups %}
+                            <a href="{% url 'applications:application-detail' followup.application.pk %}" class="block rounded-[1.25rem] border border-slate-200/80 bg-slate-50/80 p-4 transition hover:border-slate-300 hover:bg-white">
+                                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                    <div>
+                                        <h3 class="text-sm font-semibold text-slate-900">{{ followup.title }}</h3>
+                                        <p class="mt-1 text-sm text-slate-600">{{ followup.application.title }} at {{ followup.application.company.name }}</p>
+                                    </div>
+                                    <p class="text-sm font-medium text-rose-600">
+                                        {% if followup.due_at %}
+                                            Due {{ followup.due_at|date:"M j, Y \\a\\t g:i A" }}
+                                        {% else %}
+                                            No due date
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="text-sm leading-7 text-slate-600">No overdue follow-ups right now. That is a healthy place for this list to stay.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+        {% else %}
+            <div class="mt-8 rounded-[1.75rem] border border-dashed border-slate-300 bg-slate-50/70 p-10 text-center">
+                <p class="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Dashboard is waiting for data</p>
+                <h2 class="mt-3 text-2xl font-semibold tracking-tight text-slate-900">Add your first application to light up the workspace.</h2>
+                <p class="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+                    Once you start tracking roles, this dashboard will show pipeline totals, interview timing, follow-up pressure, and weekly momentum.
+                </p>
+                <a
+                    href="{% url 'applications:application-create' %}"
+                    class="mt-6 inline-flex items-center rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+                >
+                    Create your first application
+                </a>
+            </div>
+        {% endif %}
+    </section>
+</main>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    document.querySelectorAll("[data-width]").forEach((element) => {
+        element.style.width = `${element.dataset.width}%`;
+    });
+
+    document.querySelectorAll("[data-height]").forEach((element) => {
+        element.style.height = `${element.dataset.height}%`;
+    });
+</script>
+{% endblock extra_js %}

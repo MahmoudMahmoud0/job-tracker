@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'companies',
     'applications',
     'interviews',
+    'reports',
 
     # Third Party Apps
     "rest_framework",
@@ -176,6 +177,6 @@ Q_CLUSTER = {
     "orm": "default",
 }
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "reports:dashboard"
+LOGOUT_REDIRECT_URL = "/"
 
