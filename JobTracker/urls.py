@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from core.views import LandingPageView
+from reports.views import DashboardView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -9,5 +10,6 @@ urlpatterns = [
     path('companies/', include("companies.urls", namespace="companies")),
     path('applications/', include("applications.urls", namespace="applications")),
     path('interviews/', include("interviews.urls", namespace="interviews")),
+    path("dashboard/", DashboardView.as_view(), name="dashboard"),
     path('reports/', include("reports.urls", namespace="reports")),
 ]

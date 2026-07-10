@@ -5,7 +5,6 @@ from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils import timezone
 from django.views import generic
-
 from applications.models import Application, ApplicationStatusHistory, FollowUp
 from interviews.models import Interview
 
@@ -17,18 +16,19 @@ ACTIVE_APPLICATION_STATUSES = [
     "offer",
 ]
 
-
-class DashboardView(LoginRequiredMixin, generic.TemplateView):
-    template_name = "dashboard/dashboard.html"
-
+class AnalyticsBaseView(LoginRequiredMixin):
     def get_base_applications_queryset(self):
         return self.request.user.applications.select_related("company")
 
     def get_active_applications_queryset(self):
         return self.get_base_applications_queryset().filter(archived=False)
 
+
+class DashboardView(AnalyticsBaseView, generic.TemplateView):
+    template_name = "dashboard/dashboard.html"
+
     def get_applications_summary(self):
-        now = timezone.now()
+        now = timezone.localtime(timezone.now())
         next_week = now + timedelta(days=7)
         active_applications = self.get_active_applications_queryset()
 
@@ -103,7 +103,7 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
         return items
 
     def get_upcoming_attention(self):
-        now = timezone.now()
+        now = timezone.localtime(timezone.now())
         next_week = now + timedelta(days=7)
 
         upcoming_interviews = list(
@@ -295,3 +295,4 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
             }
         )
         return context
+

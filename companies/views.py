@@ -65,6 +65,6 @@ class CompanyUpdateView(LoginRequiredMixin, generic.UpdateView):
     
     # def form_valid(self, form):
     #     comapy = form.save(commit=False)
-    #     comapy.updated_at = timezone.now()
+    #     comapy.updated_at = timezone.localtime(timezone.now())
     #     comapy.save()
     #     return super().form_valid(form)

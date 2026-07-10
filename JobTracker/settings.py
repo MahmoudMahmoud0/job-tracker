@@ -72,6 +72,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.middleware.TimezoneMiddleware',
     'accounts.middleware.UserLocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -177,6 +178,6 @@ Q_CLUSTER = {
     "orm": "default",
 }
 
-LOGIN_REDIRECT_URL = "reports:dashboard"
+LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "/"
 

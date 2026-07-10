@@ -503,7 +503,7 @@ class ApplicationDetailView(LoginRequiredMixin, generic.DetailView):
                 return redirect("applications:application-detail", pk=application.pk)
 
             follow_up.completed = not follow_up.completed
-            follow_up.completed_at = timezone.now() if follow_up.completed else None
+            follow_up.completed_at = timezone.localtime(timezone.now()) if follow_up.completed else None
             follow_up.save(update_fields=["completed", "completed_at", "updated_at"])
 
             if follow_up.completed:
@@ -651,7 +651,7 @@ class FollowupListView(ApplicationBaseView, generic.ListView):
                 return redirect(request.get_full_path())
 
             follow_up.completed = not follow_up.completed
-            follow_up.completed_at = timezone.now() if follow_up.completed else None
+            follow_up.completed_at = timezone.localtime(timezone.now()) if follow_up.completed else None
             follow_up.save(update_fields=["completed", "completed_at", "updated_at"])
 
             if follow_up.completed:

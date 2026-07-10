@@ -159,7 +159,7 @@ class EmailChangeView(LoginRequiredMixin, generic.CreateView):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.token = secrets.token_urlsafe(32)
-        self.object.expires_at = timezone.now() + timedelta(hours=24)
+        self.object.expires_at = timezone.localtime(timezone.now()) + timedelta(hours=24)
         self.object.save()
 
         domain = self.request.get_host()
@@ -209,7 +209,7 @@ class EmailChangeConfirmView(generic.View):
                 {"reason": "used"},
             )
 
-        if email_change_request.expires_at <= timezone.now():
+        if email_change_request.expires_at <= timezone.localtime(timezone.now()):
             return render(
                 request,
                 "accounts/email_change_failed.html",
@@ -232,7 +232,7 @@ class EmailChangeConfirmView(generic.View):
             user.is_email_verified = True
             user.save(update_fields=["email", "is_email_verified"])
 
-            email_change_request.used_at = timezone.now()
+            email_change_request.used_at = timezone.localtime(timezone.now())
             email_change_request.save(update_fields=["used_at"])
 
         return render(
