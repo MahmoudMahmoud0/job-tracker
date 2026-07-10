@@ -59,7 +59,7 @@ class DashboardView(AnalyticsBaseView, generic.TemplateView):
         return {
             "total_applications": total_applications,
             "active_applications": active_applications.exclude(
-                status__in=["rejected", "withdrawn"]
+                status__in=["accepted", "rejected", "withdrawn"]
             ).count(),
             "upcoming_interviews_count": upcoming_interviews_count,
             "overdue_followups_count": overdue_followups_count,
@@ -83,6 +83,7 @@ class DashboardView(AnalyticsBaseView, generic.TemplateView):
             applied=Count("id", filter=Q(status="applied")),
             interviewing=Count("id", filter=Q(status="interviewing")),
             offer=Count("id", filter=Q(status="offer")),
+            accepted=Count("id", filter=Q(status="accepted")),
             rejected=Count("id", filter=Q(status="rejected")),
             withdrawn=Count("id", filter=Q(status="withdrawn")),
         )
@@ -296,3 +297,5 @@ class DashboardView(AnalyticsBaseView, generic.TemplateView):
         )
         return context
 
+class ReportView(AnalyticsBaseView, generic.TemplateView):
+    pass

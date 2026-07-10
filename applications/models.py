@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 from companies.models import Company
 
 class Application(models.Model):
@@ -9,6 +10,7 @@ class Application(models.Model):
         ("applied", "Applied"),
         ("interviewing", "Interviewing"),
         ("offer", "Offer"),
+        ("accepted", "Accepted"),
         ("rejected", "Rejected"),
         ("withdrawn", "Withdrawn"),
     ]
@@ -66,6 +68,10 @@ class Application(models.Model):
     )
     notes = models.TextField(blank=True)
     archived = models.BooleanField(default=False)
+    accepted_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
     tags = models.ManyToManyField(
         "Tags",
         blank=True,
@@ -88,6 +94,11 @@ class Application(models.Model):
             application = Application.objects.get(pk=self.pk)
             old_status = application.status
             old_notes = application.notes
+
+        if self.status == "accepted" and self.accepted_at is None:
+            self.accepted_at = timezone.localtime(timezone.now())
+        elif self.status != "accepted":
+            self.accepted_at = None
         
         super().save(*args, **kwargs)
 
